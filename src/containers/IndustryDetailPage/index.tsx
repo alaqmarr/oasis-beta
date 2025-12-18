@@ -43,22 +43,31 @@ const Breadcrumb = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 4rem;
+  font-size: 2rem;
   font-weight: 800;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.1;
   position: relative;
   z-index: 10;
+
+  @media (min-width: 768px) {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const Description = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   color: #FECACA;
   font-weight: 300;
   max-width: 48rem;
   line-height: 1.6;
   position: relative;
   z-index: 10;
+
+  @media (min-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const ContentCard = styled.div`

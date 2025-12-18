@@ -10,6 +10,14 @@ const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
   }
 
+  html {
+    font-size: 14px; /* Mobile-first base */
+    
+    @media (min-width: 768px) {
+      font-size: 16px; /* Tablet and up */
+    }
+  }
+
   body {
     margin: 0;
     padding: 0;

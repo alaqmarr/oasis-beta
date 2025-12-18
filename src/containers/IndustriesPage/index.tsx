@@ -29,7 +29,7 @@ const HeroSection = styled.section`
 const HeroTitle = styled.h1`
   position: relative;
   z-index: 10;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 800;
   color: #FFFFFF;
   letter-spacing: -0.025em;

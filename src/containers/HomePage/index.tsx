@@ -27,14 +27,15 @@ const HeroContent = styled.div`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 3.5rem;
+  font-size: 2rem;
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: ${colors.primary};
   
   @media (min-width: 768px) {
     font-size: 5rem;
+    margin-bottom: 2rem;
   }
 `;
 

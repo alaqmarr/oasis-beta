@@ -60,7 +60,7 @@ const Content = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -72,17 +72,27 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.p`
-  font-size: 1.25rem;
-  margin-bottom: 2.5rem;
+  font-size: 1rem;
+  margin-bottom: 2rem;
   line-height: 1.6;
   max-width: 600px;
   text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   color: #E5E7EB;
+
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 1rem;
+  
+  @media (min-width: 640px) {
+    flex-direction: row;
+  }
 `;
 
 const Indicators = styled.div`
