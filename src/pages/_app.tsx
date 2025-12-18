@@ -16,27 +16,53 @@ function PageInteractionHandler() {
   const { openEnquiryModal, hasSubmitted, userEmail } = useEnquiry();
   const [showIndustryAlert, setShowIndustryAlert] = useState(false);
 
+  const emailedPagesRef = React.useRef<Set<string>>(new Set());
   const shownPagesRef = React.useRef<Set<string>>(new Set());
 
+  // 1. Page Visit Tracking (Emails)
   useEffect(() => {
-    // 1. Proactive Popup Logic
+    if (!userEmail) return;
+
+    const currentPath = router.asPath;
+    if (emailedPagesRef.current.has(currentPath)) return;
+
+    // Send visit email
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'VISIT',
+        data: {
+          name: localStorage.getItem('userName') || 'Visitor',
+          email: userEmail,
+          page: currentPath
+        }
+      })
+    }).catch(err => console.error('Failed to report visit:', err));
+
+    emailedPagesRef.current.add(currentPath);
+  }, [router.asPath, userEmail]);
+
+  // 2. Proactive Popup Logic
+  useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
     const handleProactivePopup = () => {
-      // Only proceed if user hasn't submitted email
+      const excludedPaths = ['/contact'];
+      if (excludedPaths.includes(router.pathname)) {
+        return;
+      }
+
       if (!hasSubmitted && !userEmail) {
         const currentPath = router.asPath;
 
-        // Check if we've already shown popup for this specific page
         if (!shownPagesRef.current.has(currentPath)) {
           timeoutId = setTimeout(() => {
-            // Double check conditions before showing
             if (!hasSubmitted && !userEmail && !shownPagesRef.current.has(currentPath)) {
               const pageName = router.pathname.split('/').pop() || 'Home';
-              const formattedPageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+              const formattedPageName = pageName === 'Home' || pageName === '' ? 'Oasis Group' : pageName.charAt(0).toUpperCase() + pageName.slice(1);
 
-              let gist = 'Get the latest updates and product catalogs directly to your inbox.';
-              if (router.pathname.includes('products')) gist = 'Looking for specific instrumentation? Let us send you our complete product specifications.';
+              let gist = 'Oasis Group is your partner for industrial automation and instrumentation.';
               if (router.pathname.includes('industries')) gist = 'Discover how we serve your industry. Request our sector-specific case studies.';
 
               openEnquiryModal({
@@ -45,10 +71,9 @@ function PageInteractionHandler() {
                 subject: `Proactive Enquiry from ${currentPath}`
               });
 
-              // Mark this page as shown
               shownPagesRef.current.add(currentPath);
             }
-          }, 15000); // 15 seconds delay per page
+          }, 15000);
         }
       }
     };
@@ -76,13 +101,24 @@ function PageInteractionHandler() {
           maxWidth: '300px',
           animation: 'slideIn 0.5s ease-out'
         }}>
-          <h4 style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: colors.primary }}>Explore Solutions</h4>
+          <h4 style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: colors.primary }}>
+            {hasSubmitted || userEmail ? 'Have a Project?' : 'Stay Connected'}
+          </h4>
           <p style={{ fontSize: '0.875rem', marginBottom: '1rem', color: colors.text }}>
-            Check out our specialized products designed for these industries.
+            {hasSubmitted || userEmail
+              ? 'Our engineering team is ready to assist with your requirements.'
+              : 'Join our professional network for industry updates and insights.'}
           </p>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button
-              onClick={() => router.push('/products')}
+              onClick={() => {
+                openEnquiryModal({
+                  title: hasSubmitted || userEmail ? 'Project Enquiry' : 'Join Our Network',
+                  description: hasSubmitted || userEmail ? 'Tell us about your requirements.' : 'Enter your details to stay connected.',
+                  subject: hasSubmitted || userEmail ? 'Project Enquiry via Sticky' : 'Newsletter Signup'
+                });
+                setShowIndustryAlert(false);
+              }}
               style={{
                 backgroundColor: colors.primary,
                 color: 'white',
@@ -93,7 +129,7 @@ function PageInteractionHandler() {
                 cursor: 'pointer'
               }}
             >
-              View Products
+              {hasSubmitted || userEmail ? 'Enquire Now' : 'Connect'}
             </button>
             <button
               onClick={() => setShowIndustryAlert(false)}

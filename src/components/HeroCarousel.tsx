@@ -111,67 +111,67 @@ const Dot = styled.button<{ $active: boolean }>`
 `;
 
 const SLIDES = [
-    { id: 1, image: '/images/hero/slide1.png' },
-    { id: 2, image: '/images/hero/slide2.png' },
-    { id: 3, image: '/images/hero/slide3.png' }
+  { id: 1, image: '/images/hero/slide1.png' },
+  { id: 2, image: '/images/hero/slide2.png' },
+  { id: 3, image: '/images/hero/slide3.png' }
 ];
 
 export default function HeroCarousel() {
-    const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentSlide(prev => (prev + 1) % SLIDES.length);
-        }, 6000);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % SLIDES.length);
+    }, 6000);
 
-        return () => clearInterval(timer);
-    }, []);
+    return () => clearInterval(timer);
+  }, []);
 
-    return (
-        <CarouselWrapper>
-            {/* Background Slides */}
-            {SLIDES.map((slide, index) => (
-                <Slide
-                    key={slide.id}
-                    $active={index === currentSlide}
-                    $image={slide.image}
-                />
-            ))}
+  return (
+    <CarouselWrapper>
+      {/* Background Slides */}
+      {SLIDES.map((slide, index) => (
+        <Slide
+          key={slide.id}
+          $active={index === currentSlide}
+          $image={slide.image}
+        />
+      ))}
 
-            {/* Static Content Overlay */}
-            <StaticContentWrapper>
-                <ContentContainer>
-                    <Content>
-                        <Title>
-                            Precision Engineering <br />
-                            for Critical Industries
-                        </Title>
-                        <Subtitle>
-                            Delivering advanced instrumentation and automation solutions that power the world's most demanding sectors since 1974.
-                        </Subtitle>
-                        <ButtonGroup>
-                            <Link href="/products" passHref legacyBehavior>
-                                <Button>Explore Products</Button>
-                            </Link>
-                            <Link href="/contact" passHref legacyBehavior>
-                                <Button variant="outline">Contact Us</Button>
-                            </Link>
-                        </ButtonGroup>
-                    </Content>
-                </ContentContainer>
-            </StaticContentWrapper>
+      {/* Static Content Overlay */}
+      <StaticContentWrapper>
+        <ContentContainer>
+          <Content>
+            <Title>
+              Precision Engineering <br />
+              for Critical Industries
+            </Title>
+            <Subtitle>
+              Delivering advanced instrumentation and automation solutions that power the world's most demanding sectors since 1974.
+            </Subtitle>
+            <ButtonGroup>
+              <Link href="/industries" passHref legacyBehavior>
+                <Button>Explore Industries</Button>
+              </Link>
+              <Link href="/contact" passHref legacyBehavior>
+                <Button variant="outline">Contact Us</Button>
+              </Link>
+            </ButtonGroup>
+          </Content>
+        </ContentContainer>
+      </StaticContentWrapper>
 
-            {/* Indicators */}
-            <Indicators>
-                {SLIDES.map((_, index) => (
-                    <Dot
-                        key={index}
-                        $active={index === currentSlide}
-                        onClick={() => setCurrentSlide(index)}
-                        aria-label={`Go to slide ${index + 1}`}
-                    />
-                ))}
-            </Indicators>
-        </CarouselWrapper>
-    );
+      {/* Indicators */}
+      <Indicators>
+        {SLIDES.map((_, index) => (
+          <Dot
+            key={index}
+            $active={index === currentSlide}
+            onClick={() => setCurrentSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </Indicators>
+    </CarouselWrapper>
+  );
 }

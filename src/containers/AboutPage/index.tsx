@@ -5,34 +5,52 @@ import { Container, Section, Grid, GlassCard } from '../../components/ui';
 
 const HeroSection = styled.section`
   width: 100%;
-  padding: 12rem 0 6rem;
+  padding: 8rem 0 4rem;
   background-color: ${colors.primary};
-  background-image: linear-gradient(rgba(220, 38, 38, 0.9), rgba(220, 38, 38, 0.8)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1920');
+  background-image: linear-gradient(rgba(220, 38, 38, 0.9), rgba(220, 38, 38, 0.8)), url('/images/about/office-front.jpg');
   background-size: cover;
   background-position: center;
   color: #FFFFFF;
+
+  @media (min-width: 768px) {
+    padding: 12rem 0 6rem;
+  }
 `;
 
 const Title = styled.h1`
-  font-size: 4rem;
+  font-size: 2.5rem;
   font-weight: 800;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.1;
+
+  @media (min-width: 768px) {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const Subtitle = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   color: #FECACA;
   font-weight: 300;
   max-width: 48rem;
   line-height: 1.6;
+
+  @media (min-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const TimelineItem = styled.div`
   position: relative;
-  padding-left: 3rem;
-  padding-bottom: 3rem;
+  padding-left: 1.5rem;
+  padding-bottom: 2rem;
   border-left: 2px solid #FECACA;
+
+  @media (min-width: 768px) {
+    padding-left: 3rem;
+    padding-bottom: 3rem;
+  }
 
   &:last-child {
     border-left: 2px solid transparent;
@@ -79,10 +97,18 @@ function AboutPage() {
 
             <Section>
                 <Container>
-                    <Grid lgCols={2} gap="6rem">
-                        <div>
-                            <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Our Journey</h2>
-                            <div style={{ marginTop: '3rem' }}>
+                    {/* Our Journey Section */}
+                    <div style={{ marginBottom: '6rem' }}>
+                        <Grid lgCols={12} gap="4rem">
+                            <div style={{ gridColumn: 'span 4' }}>
+                                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem', color: colors.primary, position: 'sticky', top: '2rem' }}>
+                                    Our Journey
+                                </h2>
+                                <p style={{ fontSize: '1.125rem', color: colors.textLight, lineHeight: '1.6', position: 'sticky', top: '6rem' }}>
+                                    From a small trading house in Kolkata to a leading manufacturing hub in Hyderabad, our timeline reflects our resilience and ambition.
+                                </p>
+                            </div>
+                            <div style={{ gridColumn: 'span 8' }}>
                                 <TimelineItem>
                                     <Year>1974</Year>
                                     <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem' }}>Foundation</h3>
@@ -101,44 +127,50 @@ function AboutPage() {
                                 <TimelineItem>
                                     <Year>2016</Year>
                                     <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem' }}>Consolidation</h3>
-                                    <p>Complete shifting of all operations from Kolkata to Hyderabad. Established a new setup on the outskirts of Hyderabad at Genome Valley.</p>
+                                    <p>Complete shifting of all operations from Kolkata to Hyderabad. Established a new setup on the outskirts of Hyderabad at Genome Valley. Added unit for manufacturing of sensors, cable harnessing and sensing solutions.</p>
                                 </TimelineItem>
                             </div>
-                        </div>
+                        </Grid>
+                    </div>
 
-                        <div>
-                            <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Business Divisions</h2>
-                            <Grid gap="2rem">
-                                <DivisionCard>
-                                    <div style={{ height: '200px', marginBottom: '1.5rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
-                                        <img
-                                            src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=600"
-                                            alt="Instruments"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
-                                    </div>
-                                    <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: colors.primary }}>Oasis Instruments Company</h3>
-                                    <p>The original house of instruments with a vast portfolio including Flow Meters, Pressure Transmitters, Temperature Sensors, Encoders, and Condition Monitoring Systems.</p>
-                                </DivisionCard>
-                                <DivisionCard>
-                                    <div style={{ height: '200px', marginBottom: '1.5rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
-                                        <img
-                                            src="https://images.unsplash.com/photo-1531297461136-82lw9b21d94?auto=format&fit=crop&q=80&w=600"
-                                            alt="Valves"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
-                                    </div>
-                                    <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: colors.primary }}>Oasis Valves & Pneumatics</h3>
-                                    <p>Engaged in the automation of valves, both pneumatically and electrically operated. An ISO-9001 approved MSME unit located at Genome Valley, Hyderabad.</p>
-                                </DivisionCard>
-                            </Grid>
+                    {/* Business Divisions Section */}
+                    <div>
+                        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                            <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', color: colors.primary }}>Business Divisions</h2>
+                            <p style={{ fontSize: '1.125rem', maxWidth: '600px', margin: '0 auto', color: colors.textLight }}>
+                                Specialized units delivering excellence in instrumentation and automation.
+                            </p>
                         </div>
-                    </Grid>
+                        <Grid smCols={1} lgCols={2} gap="2rem">
+                            <DivisionCard>
+                                <div style={{ height: '300px', marginBottom: '1.5rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                                    <img
+                                        src="/images/about/instruments-lab.jpg"
+                                        alt="Instruments Lab"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: colors.primary }}>Oasis Instruments Company</h3>
+                                <p style={{ fontSize: '1.125rem', lineHeight: '1.6' }}>The original house of instruments expanded to sensing solutions, process automation and critical cable harness.</p>
+                            </DivisionCard>
+                            <DivisionCard>
+                                <div style={{ height: '300px', marginBottom: '1.5rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                                    <img
+                                        src="/images/about/valves-workshop.jpg"
+                                        alt="Valves Workshop"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: colors.primary }}>Oasis Valves & Pneumatics</h3>
+                                <p style={{ fontSize: '1.125rem', lineHeight: '1.6' }}>Engaged in the automation of valves, both pneumatically and electrically operated. An MSME unit located at Genome Valley, Hyderabad.</p>
+                            </DivisionCard>
+                        </Grid>
+                    </div>
                 </Container>
                 <Section bgColor="#F9FAFB">
                     <Container>
                         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                            <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', color: colors.primary }}>Our Core Values</h2>
+                            <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '1rem', color: colors.primary }}>Our Core Values</h2>
                             <p style={{ fontSize: '1.125rem', color: colors.textLight, maxWidth: '600px', margin: '0 auto' }}>
                                 Guided by principles that ensure long-term success and trust.
                             </p>

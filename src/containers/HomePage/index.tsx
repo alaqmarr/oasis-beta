@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, Button, GlassCard } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
-import { PRODUCTS } from '../../data/products';
 import ProductShowcase from '../../components/ProductShowcase';
 import HeroCarousel from '../../components/HeroCarousel';
 import { Reveal } from '../../components/Reveal';
 import { LiquidText } from '../../components/ui/LiquidText';
+import UserCaptureModal from '../../components/UserCaptureModal';
 
 const HeroSection = styled.section`
   width: 100%;
@@ -67,6 +67,7 @@ const StatLabel = styled.div`
 function HomePage() {
     return (
         <main>
+            <UserCaptureModal />
             <HeroCarousel />
             <Section>
                 <Container>
@@ -88,7 +89,7 @@ function HomePage() {
                         <Reveal delay={0.2}>
                             <div style={{ position: 'relative', height: '100%', minHeight: '400px', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
                                 <img
-                                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"
+                                    src="/images/about/instruments-lab.jpg"
                                     alt="Engineering Excellence"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />
@@ -99,89 +100,9 @@ function HomePage() {
                 </Container>
             </Section>
 
-            <Section bgColor="#F9FAFB">
-                <Container>
-                    <Reveal delay={0.2}>
-                        <Grid smCols={2} lgCols={4} gap="2rem">
-                            <div style={{ textAlign: 'center' }}>
-                                <StatNumber>50+</StatNumber>
-                                <StatLabel>Years of Experience</StatLabel>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <StatNumber>19</StatNumber>
-                                <StatLabel>Industries Served</StatLabel>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <StatNumber>500+</StatNumber>
-                                <StatLabel>Projects Completed</StatLabel>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <StatNumber>100%</StatNumber>
-                                <StatLabel>Client Satisfaction</StatLabel>
-                            </div>
-                        </Grid>
-                    </Reveal>
-                </Container>
-            </Section>
+            {/* 50+ Years Section Removed */}
 
-            <Section bgColor="#FEF2F2">
-                <Container>
-                    <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
-                        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', color: colors.primary }}>Industries We Serve</h2>
-                        <p style={{ fontSize: '1.125rem', maxWidth: '600px', margin: '0 auto' }}>
-                            Our solutions are tailored to meet the unique challenges of diverse industrial sectors.
-                        </p>
-                    </div>
-
-                    <Grid smCols={2} lgCols={4} gap="1.5rem">
-                        {INDUSTRIES.slice(0, 8).map((industry) => (
-                            <Link key={industry.id} href={`/industries/${industry.id}`} passHref legacyBehavior>
-                                <GlassCard
-                                    style={{
-                                        height: '100%',
-                                        cursor: 'pointer',
-                                        position: 'relative',
-                                        overflow: 'hidden',
-                                        isolation: 'isolate'
-                                    }}
-                                >
-                                    {/* Background Image with Overlay */}
-                                    <div style={{
-                                        position: 'absolute',
-                                        inset: 0,
-                                        zIndex: -1,
-                                        backgroundImage: `url(${industry.image})`,
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
-                                        opacity: 0.15,
-                                        transition: 'opacity 0.3s ease, transform 0.5s ease'
-                                    }}
-                                        className="card-bg"
-                                    />
-
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1rem', color: colors.primary }}>{industry.title}</h3>
-                                    <p style={{ fontSize: '0.875rem', color: colors.textLight, lineHeight: '1.6' }}>
-                                        {industry.description}
-                                    </p>
-
-                                    <style jsx>{`
-                                        div:hover .card-bg {
-                                            opacity: 0.25 !important;
-                                            transform: scale(1.05);
-                                        }
-                                    `}</style>
-                                </GlassCard>
-                            </Link>
-                        ))}
-                    </Grid>
-
-                    <div style={{ marginTop: '4rem', textAlign: 'center' }}>
-                        <Link href="/industries" passHref legacyBehavior>
-                            <Button variant="outline">View All Industries</Button>
-                        </Link>
-                    </div>
-                </Container>
-            </Section>
+            {/* Industries We Serve Section Removed */}
 
             <ProductShowcase />
 

@@ -57,6 +57,7 @@ export const Grid = styled.div<GridProps>`
 
 interface ButtonProps {
   variant?: 'outline' | 'solid';
+  disabled?: boolean;
 }
 
 export const Button = styled.a<ButtonProps>`
@@ -69,7 +70,9 @@ export const Button = styled.a<ButtonProps>`
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.025em;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.disabled ? 0.6 : 1};
+  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
   backdrop-filter: ${props => props.variant === 'outline' ? 'blur(10px)' : 'none'};
@@ -105,11 +108,11 @@ export const Button = styled.a<ButtonProps>`
 
   &:hover {
     color: #FFFFFF;
-    transform: translateY(-2px);
+    transform: ${props => props.disabled ? 'none' : 'translateY(-2px)'};
     box-shadow: ${props => props.variant === 'outline' ? '0 4px 12px rgba(220, 38, 38, 0.2)' : '0 6px 20px rgba(220, 38, 38, 0.23)'};
     
     &::before {
-      width: 100%;
+      width: ${props => props.disabled ? '0%' : '100%'};
     }
   }
 `;

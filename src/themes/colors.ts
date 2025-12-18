@@ -14,6 +14,7 @@ export const colors = {
   primaryDark,
   primaryLight,
   secondary,
+  border: '#E5E7EB',
   success: '#28a745',
   error: '#dc3545',
   transparent80: 'rgba(220, 38, 38, 0.2)', // Red transparent
@@ -29,7 +30,7 @@ export const colors = {
     md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-    glass: '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+    glass: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'
   },
   theme: {
     lightMode: {

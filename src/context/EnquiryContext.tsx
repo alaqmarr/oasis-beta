@@ -14,8 +14,6 @@ interface ModalContent {
   title: string;
   description: string;
   subject?: string;
-  productImage?: string;
-  relatedProducts?: Array<{ id: string; title: string; image: string }>;
 }
 
 const EnquiryContext = createContext<EnquiryContextType | undefined>(undefined);

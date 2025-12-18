@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, Button } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
-import { PRODUCTS } from '../../data/products';
 
 const HeroSection = styled.section`
   width: 100%;
@@ -151,7 +150,7 @@ function IndustryDetailPage() {
                         </Grid>
                     </div>
 
-                    <Grid lgCols={2} gap="4rem">
+                    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                         <ContentCard>
                             <h3 style={{ fontSize: '1.875rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Key Applications</h3>
                             <List>
@@ -160,33 +159,7 @@ function IndustryDetailPage() {
                                 ))}
                             </List>
                         </ContentCard>
-
-                        <ContentCard>
-                            <h3 style={{ fontSize: '1.875rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Recommended Products</h3>
-                            <List>
-                                {industry.products.map(prod => {
-                                    // Try to find a matching product in our database
-                                    const matchingProduct = PRODUCTS.find(p =>
-                                        p.title.toLowerCase() === prod.toLowerCase() ||
-                                        p.title.toLowerCase().includes(prod.toLowerCase()) ||
-                                        prod.toLowerCase().includes(p.title.toLowerCase())
-                                    );
-
-                                    const href = matchingProduct ? `/products/${matchingProduct.id}` : '/products';
-
-                                    return (
-                                        <ListItem key={prod}>
-                                            <Link href={href} passHref legacyBehavior>
-                                                <a style={{ textDecoration: 'underline', textUnderlineOffset: '4px', textDecorationColor: '#FECACA' }}>
-                                                    {prod}
-                                                </a>
-                                            </Link>
-                                        </ListItem>
-                                    );
-                                })}
-                            </List>
-                        </ContentCard>
-                    </Grid>
+                    </div>
                 </Container>
             </Section>
 

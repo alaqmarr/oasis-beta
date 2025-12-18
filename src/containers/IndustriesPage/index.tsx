@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, GlassCard } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
+import { CATEGORIES, Category } from '../../data/categories';
 
 const HeroSection = styled.section`
   width: 100%;
-  height: 70vh;
+  height: 60vh;
   position: relative;
   background-color: ${colors.primary};
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1920');
+  background-image: url('/images/about/factory-side.jpg');
   background-size: cover;
   background-position: center;
 
@@ -28,7 +29,7 @@ const HeroSection = styled.section`
 const HeroTitle = styled.h1`
   position: relative;
   z-index: 10;
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 800;
   color: #FFFFFF;
   letter-spacing: -0.025em;
@@ -36,138 +37,164 @@ const HeroTitle = styled.h1`
   text-shadow: 0 4px 6px rgba(0,0,0,0.3);
 
   @media (min-width: 768px) {
-    font-size: 6rem;
+    font-size: 5rem;
   }
 `;
 
-const CapabilityItem = styled.div`
-  border-top: 1px solid #FECACA;
-  padding-top: 2rem;
+const CategoryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 `;
 
-const CapNumber = styled.span`
-  color: #FFFFFF;
-  font-family: monospace;
-  font-size: 1.125rem;
-  display: block;
-  margin-bottom: 1rem;
-  opacity: 0.8;
+const CategoryItem = styled.div`
+  border: 1px solid ${colors.border || '#E5E7EB'};
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #FFFFFF;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
 `;
 
-const CapTitle = styled.h3`
-  font-size: 1.875rem;
+const CategoryHeader = styled.div<{ $isOpen: boolean }>`
+  padding: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${props => props.$isOpen ? '#FEF2F2' : '#FFFFFF'};
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #FEF2F2;
+  }
+`;
+
+const CategoryTitle = styled.h2`
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #FFFFFF;
-  margin-bottom: 1rem;
+  color: ${colors.primary};
+  margin: 0;
+
+  @media (min-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
-const CapDesc = styled.p`
-  font-size: 1.125rem;
-  color: #FECACA;
-  line-height: 1.625;
-  font-weight: 300;
+const ArrowIcon = styled.span<{ $isOpen: boolean }>`
+  font-size: 1.5rem;
+  color: ${colors.primary};
+  transform: ${props => props.$isOpen ? 'rotate(180deg)' : 'rotate(0)'};
+  transition: transform 0.3s ease;
 `;
 
-const CAPABILITIES = [
-    {
-        title: "Pressure Instruments",
-        description: "Precision pressure measurement and monitoring solutions for critical industrial processes and demanding environments."
-    },
-    {
-        title: "Temperature Control",
-        description: "Advanced temperature sensing and monitoring systems ensuring optimal performance in extreme conditions."
-    },
-    {
-        title: "Valve Automation",
-        description: "Pneumatic and electrical automation solutions for comprehensive industrial valve control systems."
-    },
-    {
-        title: "Flow Monitoring",
-        description: "Accurate flow measurement instruments enabling process optimization and operational efficiency."
-    },
-    {
-        title: "Motion Control",
-        description: "Precision encoders, resolvers, and speed sensors for demanding industrial motion applications."
-    },
-    {
-        title: "Condition Monitoring",
-        description: "Predictive maintenance and monitoring systems maximizing equipment uptime and operational reliability."
-    }
-];
+const CategoryContent = styled.div<{ $isOpen: boolean }>`
+  max-height: ${props => props.$isOpen ? '2000px' : '0'};
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease;
+  opacity: ${props => props.$isOpen ? '1' : '0'};
+  border-top: ${props => props.$isOpen ? '1px solid #E5E7EB' : 'none'};
+`;
+
+const ContentWrapper = styled.div`
+  padding: 2rem;
+`;
+
+const SubIndustryLink = styled.a`
+  display: block;
+  text-decoration: none;
+`;
 
 function IndustriesPage() {
+    const [openCategoryId, setOpenCategoryId] = useState<string | null>(null);
+
+    const toggleCategory = (id: string) => {
+        setOpenCategoryId(openCategoryId === id ? null : id);
+    };
+
     return (
         <main>
             <HeroSection>
-                <HeroTitle>Industries & Capabilities</HeroTitle>
+                <HeroTitle>Our Presence</HeroTitle>
             </HeroSection>
 
             <Section>
                 <Container>
-                    <div style={{ marginBottom: '6rem' }}>
-                        <h2 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Sectors We Power</h2>
-                        <p style={{ fontSize: '1.5rem', color: colors.text, fontWeight: '300', maxWidth: '56rem' }}>
-                            Our instrumentation solutions are trusted by 19 critical sectors, ensuring safety, efficiency, and precision across the industrial landscape.
+                    <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
+                        <p style={{ fontSize: '1.25rem', color: colors.text, maxWidth: '48rem', margin: '0 auto' }}>
+                            We operate across diverse critical sectors, delivering specialized instrumentation and automation solutions tailored to the unique demands of each industry.
                         </p>
                     </div>
 
-                    <Grid smCols={2} lgCols={4} gap="1.5rem">
-                        {INDUSTRIES.map((industry) => (
-                            <Link key={industry.id} href={`/industries/${industry.id}`} passHref legacyBehavior>
-                                <GlassCard
-                                    style={{
-                                        height: '100%',
-                                        minHeight: '15rem',
-                                        cursor: 'pointer',
-                                        position: 'relative',
-                                        overflow: 'hidden',
-                                        isolation: 'isolate',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    {/* Background Image with Overlay */}
-                                    <div style={{
-                                        position: 'absolute',
-                                        inset: 0,
-                                        zIndex: -1,
-                                        backgroundImage: `url(${industry.image})`,
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
-                                        opacity: 0.15,
-                                        transition: 'opacity 0.3s ease, transform 0.5s ease'
-                                    }}
-                                        className="card-bg"
-                                    />
+                    <CategoryContainer>
+                        {CATEGORIES.map((category) => {
+                            // Find full industry objects for the sub-industries in this category
+                            const subIndustries = category.subIndustries
+                                .map(id => INDUSTRIES.find(ind => ind.id === id))
+                                .filter(Boolean);
 
-                                    <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: colors.primary, textAlign: 'center', zIndex: 1 }}>{industry.title}</h3>
+                            return (
+                                <CategoryItem key={category.id} id={category.id}>
+                                    <CategoryHeader
+                                        $isOpen={openCategoryId === category.id}
+                                        onClick={() => toggleCategory(category.id)}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                            <img
+                                                src={category.image}
+                                                alt=""
+                                                style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }}
+                                            />
+                                            <div>
+                                                <CategoryTitle>{category.title}</CategoryTitle>
+                                                <p style={{ color: colors.textLight, marginTop: '0.5rem', fontSize: '1rem' }}>{category.description}</p>
+                                            </div>
+                                        </div>
+                                        <ArrowIcon $isOpen={openCategoryId === category.id}>▼</ArrowIcon>
+                                    </CategoryHeader>
 
-                                    <style jsx>{`
-                                        div:hover .card-bg {
-                                            opacity: 0.25 !important;
-                                            transform: scale(1.05);
-                                        }
-                                    `}</style>
-                                </GlassCard>
-                            </Link>
-                        ))}
-                    </Grid>
-                </Container>
-            </Section>
-
-            <Section bgColor={colors.primary} textColor="#FFFFFF">
-                <Container>
-                    <h2 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '6rem' }}>Our Capabilities</h2>
-                    <Grid lgCols={3} gap="4rem">
-                        {CAPABILITIES.map((cap, index) => (
-                            <CapabilityItem key={cap.title}>
-                                <CapNumber>0{index + 1}</CapNumber>
-                                <CapTitle>{cap.title}</CapTitle>
-                                <CapDesc>{cap.description}</CapDesc>
-                            </CapabilityItem>
-                        ))}
-                    </Grid>
+                                    <CategoryContent $isOpen={openCategoryId === category.id}>
+                                        <ContentWrapper>
+                                            {subIndustries.length > 0 ? (
+                                                <Grid smCols={1} lgCols={3} gap="2rem">
+                                                    {subIndustries.map((sub: any) => (
+                                                        <Link key={sub.id} href={`/industries/${sub.id}`} passHref legacyBehavior>
+                                                            <SubIndustryLink>
+                                                                <GlassCard style={{ height: '100%', cursor: 'pointer', transition: 'transform 0.2s', padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                                                    <div style={{ height: '200px', width: '100%', position: 'relative' }}>
+                                                                        <img
+                                                                            src={sub.image}
+                                                                            alt={sub.title}
+                                                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                                        />
+                                                                    </div>
+                                                                    <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                                                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem', color: colors.primary }}>
+                                                                            {sub.title}
+                                                                        </h3>
+                                                                        <p style={{ fontSize: '0.875rem', color: colors.textLight }}>
+                                                                            {sub.description}
+                                                                        </p>
+                                                                    </div>
+                                                                </GlassCard>
+                                                            </SubIndustryLink>
+                                                        </Link>
+                                                    ))}
+                                                </Grid>
+                                            ) : (
+                                                <div style={{ textAlign: 'center', padding: '2rem', color: colors.textLight, fontStyle: 'italic' }}>
+                                                    Detailed sector applications coming soon.
+                                                </div>
+                                            )}
+                                        </ContentWrapper>
+                                    </CategoryContent>
+                                </CategoryItem>
+                            );
+                        })}
+                    </CategoryContainer>
                 </Container>
             </Section>
         </main>

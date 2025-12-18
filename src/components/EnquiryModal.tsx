@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { colors } from '../themes/colors';
 import { Button } from './ui';
@@ -21,26 +21,28 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3); // Lighter overlay
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   animation: ${fadeIn} 0.3s ease;
-  backdrop-filter: blur(8px); // Stronger blur
+  backdrop-filter: blur(8px);
 `;
 
 const ModalContainer = styled.div`
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   padding: 2.5rem;
-  border-radius: 2rem; // More rounded
+  border-radius: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
   width: 90%;
   max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  animation: ${slideUp} 0.4s cubic-bezier(0.16, 1, 0.3, 1); // Apple-like spring
+  animation: ${slideUp} 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 `;
 
@@ -60,62 +62,74 @@ const Title = styled.h2`
   font-size: 1.75rem;
   font-weight: 800;
   color: ${colors.primary};
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 const Description = styled.p`
   color: ${colors.text};
   margin-bottom: 2rem;
+  font-size: 0.875rem;
   line-height: 1.6;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 1rem;
   transition: all 0.2s ease;
   
   &:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.8);
     border-color: ${colors.primary};
-    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
   }
 `;
 
 const MessageArea = styled.textarea`
   width: 100%;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
   font-size: 1rem;
-  min-height: 120px;
+  min-height: 100px;
   resize: vertical;
   transition: all 0.2s ease;
 
   &:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.8);
     border-color: ${colors.primary};
-    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
   }
 `;
 
 export default function EnquiryModal() {
-  const { isModalOpen, closeEnquiryModal, modalContent, setUserEmail, userEmail } = useEnquiry();
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const { isModalOpen, closeEnquiryModal, modalContent } = useEnquiry();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    phone: '',
+    message: ''
+  });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (isModalOpen) {
+      const storedInfo = localStorage.getItem('oasis_user_info');
+      if (storedInfo) {
+        const { name, email } = JSON.parse(storedInfo);
+        setFormData(prev => ({ ...prev, name, email }));
+      }
+    }
+  }, [isModalOpen]);
 
   if (!isModalOpen) return null;
 
@@ -123,31 +137,34 @@ export default function EnquiryModal() {
     e.preventDefault();
     setLoading(true);
 
-    const emailToSend = userEmail || email;
-
     try {
-      const response = await fetch('/api/enquiry', {
+      const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: emailToSend,
-          subject: modalContent.subject || 'Website Enquiry',
-          message: message,
-          page: router.asPath,
-          productImage: modalContent.productImage,
-          relatedProducts: modalContent.relatedProducts,
+          type: 'ENQUIRY',
+          data: {
+            ...formData,
+            page: router.asPath,
+            subject: modalContent.subject
+          }
         }),
       });
 
       if (response.ok) {
         setSuccess(true);
-        if (!userEmail) {
-          setUserEmail(emailToSend);
+        // Save info for future if not exists
+        if (!localStorage.getItem('oasis_user_info')) {
+          localStorage.setItem('oasis_user_info', JSON.stringify({
+            name: formData.name,
+            email: formData.email
+          }));
         }
+
         setTimeout(() => {
           closeEnquiryModal();
           setSuccess(false);
-          setMessage('');
+          setFormData({ name: '', email: '', company: '', phone: '', message: '' });
         }, 2000);
       } else {
         alert('Failed to send enquiry. Please try again.');
@@ -173,28 +190,45 @@ export default function EnquiryModal() {
           </div>
         ) : (
           <>
-            <Title>{modalContent.title}</Title>
-            <Description>{modalContent.description}</Description>
+            <Title>{modalContent.title || 'Get in Touch'}</Title>
+            <Description>
+              {modalContent.description || 'Fill out the form below and our team will get back to you.'}
+            </Description>
 
             <form onSubmit={handleSubmit}>
-              {!userEmail && (
-                <Input
-                  type="email"
-                  placeholder="Your Email Address"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                />
-              )}
+              <Input
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+              <Input
+                type="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+              <Input
+                placeholder="Company Name (Optional)"
+                value={formData.company}
+                onChange={e => setFormData({ ...formData, company: e.target.value })}
+              />
+              <Input
+                placeholder="Phone Number (Optional)"
+                value={formData.phone}
+                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+              />
 
               <MessageArea
-                placeholder="Any specific requirements? (Optional)"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
+                placeholder="Your Message..."
+                value={formData.message}
+                onChange={e => setFormData({ ...formData, message: e.target.value })}
+                required
               />
 
               <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
-                {loading ? 'Sending...' : 'Request Info'}
+                {loading ? 'Sending...' : 'Submit Enquiry'}
               </Button>
             </form>
           </>

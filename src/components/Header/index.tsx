@@ -147,7 +147,7 @@ function Header() {
         <Nav>
           <Link href="/" passHref legacyBehavior>
             <Logo>
-              <img src="/oasis-logo.jpg" alt="Oasis Group Logo" style={{ height: '2.5rem', borderRadius: '4px' }} />
+              <img src="/oasis-logo.png" alt="Oasis Group Logo" style={{ height: '2.5rem', borderRadius: '4px' }} />
             </Logo>
           </Link>
 
@@ -161,7 +161,6 @@ function Header() {
             <Link href="/" passHref legacyBehavior><NavLink>Home</NavLink></Link>
             <Link href="/about" passHref legacyBehavior><NavLink>About Us</NavLink></Link>
             <Link href="/industries" passHref legacyBehavior><NavLink>Industries</NavLink></Link>
-            <Link href="/products" passHref legacyBehavior><NavLink>Products</NavLink></Link>
             <Link href="/contact" passHref legacyBehavior>
               <Button style={{ padding: '0.75rem 1.5rem', fontSize: '0.875rem' }}>Contact Us</Button>
             </Link>
@@ -171,7 +170,6 @@ function Header() {
             <Link href="/" passHref legacyBehavior><MobileNavLink onClick={toggleMenu}>Home</MobileNavLink></Link>
             <Link href="/about" passHref legacyBehavior><MobileNavLink onClick={toggleMenu}>About Us</MobileNavLink></Link>
             <Link href="/industries" passHref legacyBehavior><MobileNavLink onClick={toggleMenu}>Industries</MobileNavLink></Link>
-            <Link href="/products" passHref legacyBehavior><MobileNavLink onClick={toggleMenu}>Products</MobileNavLink></Link>
             <Link href="/contact" passHref legacyBehavior>
               <Button onClick={toggleMenu} style={{ padding: '1rem 2rem', fontSize: '1rem' }}>Contact Us</Button>
             </Link>
