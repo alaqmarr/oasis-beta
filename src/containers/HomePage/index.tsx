@@ -82,15 +82,12 @@ function HomePage() {
                                 <p style={{ fontSize: '1.125rem', lineHeight: '1.8', marginBottom: '2rem' }}>
                                     At Oasis Group, we don't just supply components; we engineer solutions. With over five decades of experience, we have established ourselves as a trusted partner for industries ranging from automotive to nuclear power. Our commitment to quality and innovation ensures that your operations run safely, efficiently, and reliably.
                                 </p>
-                                <Link href="/about" passHref legacyBehavior>
-                                    <Button variant="outline">Our Story</Button>
-                                </Link>
                             </div>
                         </Reveal>
                         <Reveal delay={0.2}>
                             <div style={{ position: 'relative', height: '100%', minHeight: '400px', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
                                 <img
-                                    src="/images/about/instruments-lab.jpg"
+                                    src="/images/about/factory-side.jpg"
                                     alt="Engineering Excellence"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />
@@ -105,7 +102,7 @@ function HomePage() {
 
             {/* Industries We Serve Section Removed */}
 
-            <ProductShowcase />
+            {/* <ProductShowcase /> */}
 
             <Section bgColor={colors.primary} textColor="#FFFFFF">
                 <Container>

@@ -121,9 +121,9 @@ const Dot = styled.button<{ $active: boolean }>`
 `;
 
 const SLIDES = [
-  { id: 1, image: '/images/hero/slide1.png' },
-  { id: 2, image: '/images/hero/slide2.png' },
-  { id: 3, image: '/images/hero/slide3.png' }
+  { id: 1, image: '/images/1.jpg' },
+  { id: 2, image: '/images/2.jpg' },
+  { id: 3, image: '/images/3.jpg' }
 ];
 
 export default function HeroCarousel() {

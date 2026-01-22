@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, Button } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
+import { getProductsForIndustry, Product } from '../../data/products';
+import ProductEnquiryModal from '../../components/ProductEnquiryModal';
 
 const HeroSection = styled.section`
   width: 100%;
-  padding: 12rem 0 6rem;
+  padding: 8rem 0 4rem;
   background-color: ${colors.primary};
   color: #FFFFFF;
+
+  position: relative;
+
+  @media (min-width: 768px) {
+    padding: 10rem 0 5rem;
+  }
 `;
 
 const HeroBg = styled.div`
@@ -23,9 +31,9 @@ const HeroBg = styled.div`
 `;
 
 const Breadcrumb = styled.div`
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #FECACA;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   position: relative;
@@ -43,21 +51,21 @@ const Breadcrumb = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 800;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   line-height: 1.1;
   position: relative;
   z-index: 10;
 
   @media (min-width: 768px) {
-    font-size: 4rem;
-    margin-bottom: 2rem;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
 const Description = styled.p`
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: #FECACA;
   font-weight: 300;
   max-width: 48rem;
@@ -66,127 +74,216 @@ const Description = styled.p`
   z-index: 10;
 
   @media (min-width: 768px) {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 `;
 
-const ContentCard = styled.div`
-  background-color: #FFFFFF;
-  border: 1px solid #FECACA;
-  padding: 3rem;
-  height: 100%;
+const SectionTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: ${colors.primary};
+
+  @media (min-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
 `;
 
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
+const ProductCard = styled.div`
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  user-select: none;
+
+  &:hover {
+    border-color: ${colors.primary};
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
-const ListItem = styled.li`
-  padding: 1rem 0;
-  border-bottom: 1px solid #FEF2F2;
+const ProductName = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: ${colors.text};
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  color: ${colors.text};
-  font-size: 1.125rem;
-
-  &:last-child {
-    border-bottom: none;
-  }
+  gap: 0.5rem;
 
   &::before {
     content: '→';
     color: ${colors.primary};
-    font-weight: 700;
+  }
+`;
+
+const ProductDesc = styled.p`
+  font-size: 0.875rem;
+  color: ${colors.textLight};
+  line-height: 1.5;
+`;
+
+const ContentCard = styled.div`
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  padding: 2rem;
+
+  @media (min-width: 768px) {
+    padding: 2.5rem;
+  }
+`;
+
+const OverviewText = styled.p`
+  font-size: 1rem;
+  line-height: 1.8;
+  color: ${colors.text};
+
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+  }
+`;
+
+const CTATitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
 function IndustryDetailPage() {
-    const router = useRouter();
-    const { slug } = router.query;
+  const router = useRouter();
+  const { slug } = router.query;
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const industry = INDUSTRIES.find(i => i.id === slug);
+  const industry = INDUSTRIES.find(i => i.id === slug);
 
-    if (!industry) {
-        return (
-            <Section>
-                <Container>
-                    <h1>Industry Not Found</h1>
-                    <Link href="/industries" passHref legacyBehavior>
-                        <Button>Back to Industries</Button>
-                    </Link>
-                </Container>
-            </Section>
-        );
-    }
-
+  if (!industry) {
     return (
-        <main>
-            <HeroSection>
-                <HeroBg />
-                <Container>
-                    <Breadcrumb>
-                        <Link href="/" passHref legacyBehavior><a>Home</a></Link>
-                        <span>/</span>
-                        <Link href="/industries" passHref legacyBehavior><a>Industries</a></Link>
-                        <span>/</span>
-                        {industry.title}
-                    </Breadcrumb>
-                    <Title>{industry.title}</Title>
-                    <Description>{industry.description}</Description>
-                </Container>
-            </HeroSection>
-
-            <Section>
-                <Container>
-                    <div style={{ marginBottom: '6rem' }}>
-                        <Grid lgCols={2} gap="4rem" style={{ alignItems: 'center' }}>
-                            <div>
-                                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Overview</h2>
-                                <p style={{ fontSize: '1.25rem', lineHeight: '1.8', color: colors.text }}>
-                                    {industry.longDescription}
-                                </p>
-                            </div>
-                            <div style={{ borderRadius: '1.5rem', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
-                                <img
-                                    src={industry.image || `https://placehold.co/800x600/e2e8f0/1e293b?text=${industry.title.replace(/\s+/g, '+')}`}
-                                    alt={industry.title}
-                                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                                />
-                            </div>
-                        </Grid>
-                    </div>
-
-                    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                        <ContentCard>
-                            <h3 style={{ fontSize: '1.875rem', fontWeight: '800', marginBottom: '2rem', color: colors.primary }}>Key Applications</h3>
-                            <List>
-                                {industry.applications.map(app => (
-                                    <ListItem key={app}>{app}</ListItem>
-                                ))}
-                            </List>
-                        </ContentCard>
-                    </div>
-                </Container>
-            </Section>
-
-            <Section bgColor={colors.primary} textColor="#FFFFFF">
-                <Container>
-                    <div style={{ textAlign: 'center' }}>
-                        <h2 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '2rem' }}>Need a Solution for {industry.title}?</h2>
-                        <p style={{ fontSize: '1.5rem', color: '#FECACA', marginBottom: '4rem' }}>
-                            Contact our engineering team for a consultation tailored to your specific requirements.
-                        </p>
-                        <Link href="/contact" passHref legacyBehavior>
-                            <Button style={{ backgroundColor: '#FFFFFF', color: colors.primary }}>Get in Touch</Button>
-                        </Link>
-                    </div>
-                </Container>
-            </Section>
-        </main>
+      <Section>
+        <Container>
+          <h1>Industry Not Found</h1>
+          <Link href="/industries" passHref legacyBehavior>
+            <Button>Back to Industries</Button>
+          </Link>
+        </Container>
+      </Section>
     );
+  }
+
+  // Get products for this industry
+  const products = getProductsForIndustry(industry.id);
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  return (
+    <main>
+      <HeroSection>
+        <HeroBg />
+        <Container>
+          <Breadcrumb>
+            <Link href="/" passHref legacyBehavior><a>Home</a></Link>
+            <span>/</span>
+            <Link href="/industries" passHref legacyBehavior><a>Industries</a></Link>
+            <span>/</span>
+            {industry.title}
+          </Breadcrumb>
+          <Title>{industry.title}</Title>
+          <Description>{industry.description}</Description>
+        </Container>
+      </HeroSection>
+
+      <Section>
+        <Container>
+          {/* Overview Section */}
+          <div style={{ marginBottom: '4rem' }}>
+            <Grid lgCols={2} gap="3rem">
+              <div>
+                <SectionTitle>Overview</SectionTitle>
+                <OverviewText>{industry.longDescription}</OverviewText>
+              </div>
+              <div style={{ borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+                <img
+                  src={industry.image || `https://placehold.co/800x600/e2e8f0/1e293b?text=${industry.title.replace(/\s+/g, '+')}`}
+                  alt={industry.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+            </Grid>
+          </div>
+
+          {/* Products Section */}
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <ContentCard>
+              <SectionTitle style={{ textAlign: 'center' }}>Our Products for {industry.title}</SectionTitle>
+              <p style={{ textAlign: 'center', color: colors.textLight, marginBottom: '2rem' }}>
+                Click on a product to enquire about specifications and pricing.
+              </p>
+              <Grid smCols={1} lgCols={2} gap="1rem">
+                {products.map(product => (
+                  <ProductCard
+                    key={product.id}
+                    onClick={() => handleProductClick(product)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleProductClick(product)}
+                  >
+                    <ProductName>{product.name}</ProductName>
+                    <ProductDesc>{product.description}</ProductDesc>
+                  </ProductCard>
+                ))}
+              </Grid>
+            </ContentCard>
+          </div>
+        </Container>
+      </Section>
+
+      <Section bgColor={colors.primary} textColor="#FFFFFF">
+        <Container>
+          <div style={{ textAlign: 'center' }}>
+            <CTATitle>Need a Custom Solution for {industry.title}?</CTATitle>
+            <p style={{ fontSize: '1rem', color: '#FECACA', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
+              Our engineering team can customize products to meet your specific requirements.
+            </p>
+            <Link href="/contact" passHref legacyBehavior>
+              <Button style={{ backgroundColor: '#FFFFFF', color: colors.primary }}>Contact Us</Button>
+            </Link>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Product Enquiry Modal */}
+      <ProductEnquiryModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        product={selectedProduct}
+        currentIndustryId={industry.id}
+      />
+    </main >
+  );
 }
 
 export default IndustryDetailPage;

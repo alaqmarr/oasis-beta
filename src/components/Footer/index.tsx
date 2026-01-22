@@ -42,7 +42,7 @@ function Footer() {
     return (
         <FooterWrapper>
             <Container>
-                <Grid smCols={2} lgCols={4} gap="3rem">
+                <Grid smCols={2} lgCols={3} gap="3rem">
                     <div>
                         <div style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <img src="/oasis-logo.jpg" alt="Oasis Group Logo" style={{ height: '3rem', borderRadius: '4px' }} />
@@ -58,20 +58,12 @@ function Footer() {
                         <Link href="/" passHref legacyBehavior><FooterLink>Home</FooterLink></Link>
                         <Link href="/about" passHref legacyBehavior><FooterLink>About Us</FooterLink></Link>
                         <Link href="/industries" passHref legacyBehavior><FooterLink>Industries</FooterLink></Link>
-                        <Link href="/products" passHref legacyBehavior><FooterLink>Products</FooterLink></Link>
                     </div>
 
-                    <div>
-                        <FooterTitle>Products</FooterTitle>
-                        <Link href="/products/flow-meters" passHref legacyBehavior><FooterLink>Flow Meters</FooterLink></Link>
-                        <Link href="/products/pressure-transmitters" passHref legacyBehavior><FooterLink>Pressure Transmitters</FooterLink></Link>
-                        <Link href="/products/temperature-sensors" passHref legacyBehavior><FooterLink>Temperature Sensors</FooterLink></Link>
-                        <Link href="/products/encoders" passHref legacyBehavior><FooterLink>Encoders</FooterLink></Link>
-                    </div>
 
                     <div>
                         <FooterTitle>Contact</FooterTitle>
-                        <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>Plot – 2, TSIIC Industrial Park</p>
+                        <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>Plot – 2, TGSIC Industrial Park</p>
                         <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>Genome Valley, Hyderabad</p>
                         <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>+91-91210 84141</p>
                         <p style={{ color: '#FECACA' }}>office@oasis-group.co.in</p>

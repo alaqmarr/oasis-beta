@@ -59,8 +59,14 @@ function PageInteractionHandler() {
         if (!shownPagesRef.current.has(currentPath)) {
           timeoutId = setTimeout(() => {
             if (!hasSubmitted && !userEmail && !shownPagesRef.current.has(currentPath)) {
-              const pageName = router.pathname.split('/').pop() || 'Home';
-              const formattedPageName = pageName === 'Home' || pageName === '' ? 'Oasis Group' : pageName.charAt(0).toUpperCase() + pageName.slice(1);
+              let pageName = router.pathname.split('/').pop() || 'Home';
+
+              // Handle dynamic routes like [slug]
+              if (pageName === '[slug]' && router.query.slug) {
+                pageName = Array.isArray(router.query.slug) ? router.query.slug[0] : router.query.slug;
+              }
+
+              const formattedPageName = pageName === 'Home' || pageName === '' ? 'Oasis Group' : pageName.charAt(0).toUpperCase() + pageName.slice(1).replace(/-/g, ' ');
 
               let gist = 'Oasis Group is your partner for industrial automation and instrumentation.';
               if (router.pathname.includes('industries')) gist = 'Discover how we serve your industry. Request our sector-specific case studies.';
