@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, Button } from '../../components/ui';
@@ -204,8 +205,19 @@ function IndustryDetailPage() {
     setSelectedProduct(null);
   };
 
+  // All keywords for SEO (same on every page)
+  const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
+
   return (
     <main>
+      <Head>
+        <title>{industry.title} Instrumentation & Sensors | Oasis Group</title>
+        <meta name="description" content={`${industry.description} Oasis Group provides ${products.map(p => p.name).join(', ')} for ${industry.title.toLowerCase()} applications. Leading industrial instrumentation supplier in India.`} />
+        <meta name="keywords" content={allKeywords} />
+        <link rel="canonical" href={`https://oasisgroup.com/industries/${industry.id}`} />
+        <meta property="og:title" content={`${industry.title} Solutions | Oasis Group`} />
+        <meta property="og:description" content={industry.description} />
+      </Head>
       <HeroSection>
         <HeroImage $bgImage={industry.image || `https://placehold.co/1920x800/e2e8f0/1e293b?text=${industry.title.replace(/\s+/g, '+')}`} />
         <HeroOverlay />

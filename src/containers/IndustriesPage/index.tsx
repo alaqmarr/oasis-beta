@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Head from 'next/head';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, GlassCard } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
 import { CATEGORIES, Category } from '../../data/categories';
+
+// All keywords for SEO (same on every page)
+const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
 
 const HeroSection = styled.section`
   width: 100%;
@@ -117,6 +121,14 @@ function IndustriesPage() {
 
     return (
         <main>
+            <Head>
+                <title>Industries We Serve | Oasis Group</title>
+                <meta name="description" content="Oasis Group serves automotive, railway, oil & gas, thermal power, nuclear power, hydel power, wind energy, defence, mining, steel plants, and water treatment industries with precision instrumentation and sensors." />
+                <meta name="keywords" content={allKeywords} />
+                <link rel="canonical" href="https://oasisgroup.com/industries" />
+                <meta property="og:title" content="Industries We Serve | Oasis Group" />
+                <meta property="og:description" content="Industrial instrumentation solutions for automotive, railway, power generation, oil & gas, and manufacturing industries." />
+            </Head>
             <HeroSection>
                 <HeroTitle>Our Presence</HeroTitle>
             </HeroSection>
