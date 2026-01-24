@@ -36,12 +36,11 @@ const ModalContainer = styled.div`
   padding: 2rem;
   border-radius: 1rem;
   width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-width: 450px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   animation: ${slideUp} 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  text-align: center;
 `;
 
 const CloseButton = styled.button`
@@ -56,23 +55,16 @@ const CloseButton = styled.button`
   &:hover { color: ${colors.primary}; }
 `;
 
-const ProductBadge = styled.div`
-  display: inline-block;
-  background: ${colors.primary};
-  color: #FFFFFF;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-`;
-
-const Title = styled.h2`
-  font-size: 1.5rem;
+const QuestionTitle = styled.h2`
+  font-size: 1.375rem;
   font-weight: 800;
   color: ${colors.text};
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+
+  span {
+    color: ${colors.primary};
+  }
 `;
 
 const Description = styled.p`
@@ -88,6 +80,7 @@ const Label = styled.label`
   font-weight: 600;
   color: ${colors.text};
   margin-bottom: 0.5rem;
+  text-align: left;
 `;
 
 const Input = styled.input`
@@ -131,7 +124,7 @@ const TextArea = styled.textarea`
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
   font-size: 1rem;
-  min-height: 100px;
+  min-height: 80px;
   resize: vertical;
 
   &:focus {
@@ -155,12 +148,9 @@ export default function ProductEnquiryModal({
     currentIndustryId
 }: ProductEnquiryModalProps) {
     const [formData, setFormData] = useState({
-        name: '',
         email: '',
-        company: '',
-        phone: '',
         industryId: currentIndustryId || '',
-        specificRequest: ''
+        others: ''
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -173,12 +163,15 @@ export default function ProductEnquiryModal({
     // If no specific mapping, show all industries
     const industriesToShow = relevantIndustries.length > 0 ? relevantIndustries : INDUSTRIES;
 
+    // Get current industry name for display
+    const currentIndustry = INDUSTRIES.find(i => i.id === currentIndustryId);
+
     useEffect(() => {
         if (isOpen) {
             const storedInfo = localStorage.getItem('oasis_user_info');
             if (storedInfo) {
-                const { name, email } = JSON.parse(storedInfo);
-                setFormData(prev => ({ ...prev, name, email, industryId: currentIndustryId || '' }));
+                const { email } = JSON.parse(storedInfo);
+                setFormData(prev => ({ ...prev, email: email || '', industryId: currentIndustryId || '' }));
             } else {
                 setFormData(prev => ({ ...prev, industryId: currentIndustryId || '' }));
             }
@@ -198,36 +191,26 @@ export default function ProductEnquiryModal({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    type: 'ENQUIRY',
+                    type: 'PRODUCT_ENQUIRY',
                     data: {
-                        name: formData.name,
                         email: formData.email,
-                        company: formData.company,
-                        phone: formData.phone,
-                        message: `
-Product Enquiry: ${product.name}
-Industry: ${selectedIndustry?.title || 'Not specified'}
-Specific Request: ${formData.specificRequest || 'None'}
-            `.trim(),
+                        product: product.name,
+                        industry: selectedIndustry?.title || 'Not specified',
+                        others: formData.others || 'None',
                         page: router.asPath,
-                        subject: `Product Enquiry: ${product.name}`
+                        subject: `Product Enquiry: ${product.name} for ${selectedIndustry?.title || 'Unspecified Industry'}`
                     }
                 }),
             });
 
             if (response.ok) {
                 setSuccess(true);
-                if (!localStorage.getItem('oasis_user_info')) {
-                    localStorage.setItem('oasis_user_info', JSON.stringify({
-                        name: formData.name,
-                        email: formData.email
-                    }));
-                }
+                localStorage.setItem('oasis_user_info', JSON.stringify({ email: formData.email }));
 
                 setTimeout(() => {
                     onClose();
                     setSuccess(false);
-                    setFormData({ name: '', email: '', company: '', phone: '', industryId: '', specificRequest: '' });
+                    setFormData({ email: '', industryId: '', others: '' });
                 }, 2000);
             } else {
                 alert('Failed to send enquiry. Please try again.');
@@ -246,26 +229,18 @@ Specific Request: ${formData.specificRequest || 'None'}
                 <CloseButton onClick={onClose}>&times;</CloseButton>
 
                 {success ? (
-                    <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                    <div style={{ padding: '1rem 0' }}>
                         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-                        <Title>Enquiry Sent!</Title>
+                        <QuestionTitle>Enquiry Sent!</QuestionTitle>
                         <Description>Our team will contact you shortly about {product.name}.</Description>
                     </div>
                 ) : (
                     <>
-                        <ProductBadge>Product Enquiry</ProductBadge>
-                        <Title>{product.name}</Title>
-                        <Description>{product.description}</Description>
+                        <QuestionTitle>
+                            Are you interested in <span>{product.name}</span> for <span>{currentIndustry?.title || 'your industry'}</span>?
+                        </QuestionTitle>
 
                         <form onSubmit={handleSubmit}>
-                            <Label>Full Name *</Label>
-                            <Input
-                                placeholder="Your name"
-                                value={formData.name}
-                                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                required
-                            />
-
                             <Label>Email Address *</Label>
                             <Input
                                 type="email"
@@ -273,20 +248,6 @@ Specific Request: ${formData.specificRequest || 'None'}
                                 value={formData.email}
                                 onChange={e => setFormData({ ...formData, email: e.target.value })}
                                 required
-                            />
-
-                            <Label>Company (Optional)</Label>
-                            <Input
-                                placeholder="Company name"
-                                value={formData.company}
-                                onChange={e => setFormData({ ...formData, company: e.target.value })}
-                            />
-
-                            <Label>Phone (Optional)</Label>
-                            <Input
-                                placeholder="Phone number"
-                                value={formData.phone}
-                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
                             />
 
                             <Label>Industry *</Label>
@@ -301,15 +262,15 @@ Specific Request: ${formData.specificRequest || 'None'}
                                 ))}
                             </Select>
 
-                            <Label>Specific Request (Optional)</Label>
+                            <Label>Others (Optional)</Label>
                             <TextArea
-                                placeholder="Tell us about your specific requirements, quantities, or customization needs..."
-                                value={formData.specificRequest}
-                                onChange={e => setFormData({ ...formData, specificRequest: e.target.value })}
+                                placeholder="Any specific requirements or questions..."
+                                value={formData.others}
+                                onChange={e => setFormData({ ...formData, others: e.target.value })}
                             />
 
                             <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
-                                {loading ? 'Sending...' : 'Submit Enquiry'}
+                                {loading ? 'Sending...' : 'Yes, Send Enquiry'}
                             </Button>
                         </form>
                     </>

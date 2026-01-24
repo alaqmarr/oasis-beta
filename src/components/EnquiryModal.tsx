@@ -38,12 +38,11 @@ const ModalContainer = styled.div`
   border-radius: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
   width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-width: 420px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   animation: ${slideUp} 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  text-align: center;
 `;
 
 const CloseButton = styled.button`
@@ -59,22 +58,23 @@ const CloseButton = styled.button`
 `;
 
 const Title = styled.h2`
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: ${colors.primary};
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
 `;
 
 const Description = styled.p`
   color: ${colors.text};
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 0.875rem;
   line-height: 1.6;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
   border-radius: 0.75rem;
@@ -89,34 +89,9 @@ const Input = styled.input`
   }
 `;
 
-const MessageArea = styled.textarea`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 0.75rem;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
-  min-height: 100px;
-  resize: vertical;
-  transition: all 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${colors.primary};
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-  }
-`;
-
 export default function EnquiryModal() {
-  const { isModalOpen, closeEnquiryModal, modalContent } = useEnquiry();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    phone: '',
-    message: ''
-  });
+  const { isModalOpen, closeEnquiryModal, modalContent, setUserEmail } = useEnquiry();
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
@@ -125,8 +100,8 @@ export default function EnquiryModal() {
     if (isModalOpen) {
       const storedInfo = localStorage.getItem('oasis_user_info');
       if (storedInfo) {
-        const { name, email } = JSON.parse(storedInfo);
-        setFormData(prev => ({ ...prev, name, email }));
+        const { email: storedEmail } = JSON.parse(storedInfo);
+        if (storedEmail) setEmail(storedEmail);
       }
     }
   }, [isModalOpen]);
@@ -142,32 +117,27 @@ export default function EnquiryModal() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'ENQUIRY',
+          type: 'INTEREST',
           data: {
-            ...formData,
+            email,
             page: router.asPath,
-            subject: modalContent.subject
+            subject: modalContent.subject || 'Interest Enquiry'
           }
         }),
       });
 
       if (response.ok) {
         setSuccess(true);
-        // Save info for future if not exists
-        if (!localStorage.getItem('oasis_user_info')) {
-          localStorage.setItem('oasis_user_info', JSON.stringify({
-            name: formData.name,
-            email: formData.email
-          }));
-        }
+        setUserEmail(email);
+        localStorage.setItem('oasis_user_info', JSON.stringify({ email }));
 
         setTimeout(() => {
           closeEnquiryModal();
           setSuccess(false);
-          setFormData({ name: '', email: '', company: '', phone: '', message: '' });
+          setEmail('');
         }, 2000);
       } else {
-        alert('Failed to send enquiry. Please try again.');
+        alert('Failed to submit. Please try again.');
       }
     } catch (error) {
       console.error(error);
@@ -183,52 +153,29 @@ export default function EnquiryModal() {
         <CloseButton onClick={closeEnquiryModal}>&times;</CloseButton>
 
         {success ? (
-          <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+          <div style={{ padding: '1rem 0' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-            <Title>Enquiry Sent!</Title>
-            <Description>We will get back to you shortly.</Description>
+            <Title>Thank You!</Title>
+            <Description>We'll be in touch soon.</Description>
           </div>
         ) : (
           <>
-            <Title>{modalContent.title || 'Get in Touch'}</Title>
+            <Title>{modalContent.title || 'Interested?'}</Title>
             <Description>
-              {modalContent.description || 'Fill out the form below and our team will get back to you.'}
+              {modalContent.description || 'Enter your email and we\'ll get back to you.'}
             </Description>
 
             <form onSubmit={handleSubmit}>
               <Input
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
-              <Input
                 type="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={e => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
-              <Input
-                placeholder="Company Name (Optional)"
-                value={formData.company}
-                onChange={e => setFormData({ ...formData, company: e.target.value })}
-              />
-              <Input
-                placeholder="Phone Number (Optional)"
-                value={formData.phone}
-                onChange={e => setFormData({ ...formData, phone: e.target.value })}
-              />
-
-              <MessageArea
-                placeholder="Your Message..."
-                value={formData.message}
-                onChange={e => setFormData({ ...formData, message: e.target.value })}
+                placeholder="Enter your email address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 required
               />
 
               <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
-                {loading ? 'Sending...' : 'Submit Enquiry'}
+                {loading ? 'Submitting...' : 'Yes, I\'m Interested'}
               </Button>
             </form>
           </>

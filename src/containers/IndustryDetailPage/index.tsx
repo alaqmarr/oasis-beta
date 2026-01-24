@@ -11,23 +11,28 @@ import ProductEnquiryModal from '../../components/ProductEnquiryModal';
 const HeroSection = styled.section`
   width: 100%;
   padding: 8rem 0 4rem;
-  background-color: ${colors.primary};
   color: #FFFFFF;
-
   position: relative;
+  overflow: hidden;
 
   @media (min-width: 768px) {
     padding: 10rem 0 5rem;
   }
 `;
 
-const HeroBg = styled.div`
+const HeroImage = styled.div<{ $bgImage?: string }>`
   position: absolute;
   inset: 0;
+  background-image: ${props => props.$bgImage ? `url(${props.$bgImage})` : 'none'};
+  background-size: cover;
+  background-position: center;
   background-color: ${colors.primary};
-  opacity: 0.1;
-  background-image: radial-gradient(#FFFFFF 1px, transparent 1px);
-  background-size: 20px 20px;
+`;
+
+const HeroOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(153, 27, 27, 0.9) 0%, rgba(220, 38, 38, 0.85) 100%);
 `;
 
 const Breadcrumb = styled.div`
@@ -202,7 +207,8 @@ function IndustryDetailPage() {
   return (
     <main>
       <HeroSection>
-        <HeroBg />
+        <HeroImage $bgImage={industry.image || `https://placehold.co/1920x800/e2e8f0/1e293b?text=${industry.title.replace(/\s+/g, '+')}`} />
+        <HeroOverlay />
         <Container>
           <Breadcrumb>
             <Link href="/" passHref legacyBehavior><a>Home</a></Link>
@@ -218,23 +224,6 @@ function IndustryDetailPage() {
 
       <Section>
         <Container>
-          {/* Overview Section */}
-          <div style={{ marginBottom: '4rem' }}>
-            <Grid lgCols={2} gap="3rem">
-              <div>
-                <SectionTitle>Overview</SectionTitle>
-                <OverviewText>{industry.longDescription}</OverviewText>
-              </div>
-              <div style={{ borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}>
-                <img
-                  src={industry.image || `https://placehold.co/800x600/e2e8f0/1e293b?text=${industry.title.replace(/\s+/g, '+')}`}
-                  alt={industry.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
-            </Grid>
-          </div>
-
           {/* Products Section */}
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             <ContentCard>

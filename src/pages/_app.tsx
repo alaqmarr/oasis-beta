@@ -162,9 +162,30 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={{ colors }}>
       <EnquiryProvider>
         <Head>
-          <title>Oasis Group | Precision Engineering</title>
-          <meta name="description" content="Oasis Group - Industrial Instrumentation and Automation Solutions" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+          <title>Oasis Group | Industrial Instrumentation & Automation Solutions</title>
+          <meta name="description" content="Oasis Group - Leading supplier of industrial instrumentation, sensors, and automation solutions. Specializing in speed sensors, vibration sensors, temperature sensors, flow meters, pressure transmitters, level transmitters for automotive, railway, oil & gas, power generation, and manufacturing industries." />
+          <meta name="keywords" content="industrial instrumentation, automation solutions, speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, automotive sensors, railway sensors, oil and gas instrumentation, thermal power instrumentation, nuclear power sensors, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial sensors India, precision engineering, condition monitoring, predictive maintenance, process control, safety systems" />
+
+          {/* Open Graph / Social Media */}
+          <meta property="og:type" content="website" />
+          <meta property="og:site_name" content="Oasis Group" />
+          <meta property="og:title" content="Oasis Group | Industrial Instrumentation & Automation" />
+          <meta property="og:description" content="Leading supplier of industrial sensors and automation solutions for automotive, railway, power generation, oil & gas, and manufacturing industries." />
+
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Oasis Group | Industrial Instrumentation" />
+          <meta name="twitter:description" content="Industrial sensors, flow meters, transmitters for automotive, railway, power, oil & gas industries." />
+
+          {/* Additional SEO */}
+          <meta name="robots" content="index, follow" />
+          <meta name="author" content="Oasis Group" />
+          <meta name="geo.region" content="IN" />
+          <meta name="geo.country" content="India" />
+
           <link rel="icon" href="/favicon.ico" />
+          <link rel="canonical" href="https://oasisgroup.com" />
         </Head>
         <GlobalStyle />
         <Header />

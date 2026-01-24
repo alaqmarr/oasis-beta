@@ -47,6 +47,6 @@ export const CATEGORIES: Category[] = [
     title: 'Storage Power',
     description: 'Innovative solutions for energy storage systems and power distribution.',
     image: 'https://images.unsplash.com/photo-1764948935347-3f21c9c31945?q=80&w=1170&auto=format&fit=crop',
-    subIndustries: ['electrical-panels']
+    subIndustries: ['energy-storage-panels']
   }
 ];

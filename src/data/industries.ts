@@ -172,19 +172,19 @@ export const INDUSTRIES: Industry[] = [
     image: 'https://images.unsplash.com/photo-1518706342898-1fdce767cc32?auto=format&fit=crop&q=80&w=1080'
   },
   {
-    id: 'electrical-panels',
-    title: 'Electrical Panels',
-    description: 'Components for switchgear, control panels, and power distribution.',
+    id: 'energy-storage-panels',
+    title: 'Energy Storage Panels',
+    description: 'Monitoring solutions for battery energy storage systems and power management.',
     longDescription:
-      'Panel builders rely on our high-quality relays, meters, and switches. We provide the essential components that make up the nerve center of industrial automation and power distribution systems.',
+      'Energy storage systems require precise temperature and vibration monitoring to ensure safety and optimal performance. Our sensors help maintain battery health and prevent thermal runaway in large-scale energy storage installations.',
     applications: [
-      'Switchgear Control',
-      'Distribution Panels',
-      'Motor Control Centers',
-      'Automation Cabinets',
-      'Power Factor Correction'
+      'Battery Monitoring',
+      'Thermal Management',
+      'Power Conversion',
+      'Grid Integration',
+      'Safety Systems'
     ],
-    products: ['Relays', 'Counters', 'Vacuum Contactors', 'Temperature Sensors', 'Industrial Printers'],
+    products: ['Temperature Sensors', 'Vibration Sensors'],
     image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=1080'
   },
   {
