@@ -166,7 +166,7 @@ function Header() {
         <Nav>
           <Link href="/" passHref legacyBehavior>
             <Logo>
-              <img src="/logo.jpg.jpeg" alt="Oasis Group Logo" style={{ height: '2.5rem', width: 'auto', borderRadius: '4px' }} />
+              <img src="/logo.jpg.jpeg" alt="Oasis Group Logo" style={{ height: '3rem', width: 'auto' }} />
             </Logo>
           </Link>
 
