@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { colors } from '../../themes/colors';
-import { Container, Section, Grid, Button } from '../../components/ui';
+import { Container, Section, Button } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
 import { getProductsForIndustry, Product } from '../../data/products';
 import ProductEnquiryModal from '../../components/ProductEnquiryModal';
@@ -96,48 +96,87 @@ const SectionTitle = styled.h2`
   }
 `;
 
-const ProductCard = styled.div`
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s ease;
+const ProductsContainer = styled.div`
+  position: relative;
   width: 100%;
-  user-select: none;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  
+  @media (min-width: 768px) {
+    min-height: 400px;
+  }
+`;
+
+const ProductsCircle = styled.div<{ $count: number }>`
+  position: relative;
+  width: 280px;
+  height: 280px;
+  
+  @media (min-width: 768px) {
+    width: 350px;
+    height: 350px;
+  }
+`;
+
+const ProductPill = styled.button<{ $angle: number; $radius: number }>`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: ${props => {
+    const angleRad = (props.$angle * Math.PI) / 180;
+    const x = Math.cos(angleRad) * props.$radius;
+    const y = Math.sin(angleRad) * props.$radius;
+    return `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+  }};
+  background: #FFFFFF;
+  border: 2px solid ${colors.primary};
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: ${colors.primary};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+  
+  @media (min-width: 768px) {
+    width: 110px;
+    height: 110px;
+    font-size: 0.875rem;
+  }
 
   &:hover {
-    border-color: ${colors.primary};
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
-    transform: translateY(-2px);
+    background: ${colors.primary};
+    color: #FFFFFF;
+    transform: ${props => {
+    const angleRad = (props.$angle * Math.PI) / 180;
+    const x = Math.cos(angleRad) * props.$radius;
+    const y = Math.sin(angleRad) * props.$radius;
+    return `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1.1)`;
+  }};
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+    z-index: 10;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: ${props => {
+    const angleRad = (props.$angle * Math.PI) / 180;
+    const x = Math.cos(angleRad) * props.$radius;
+    const y = Math.sin(angleRad) * props.$radius;
+    return `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`;
+  }};
   }
 `;
 
-const ProductName = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: ${colors.text};
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &::before {
-    content: '→';
-    color: ${colors.primary};
-  }
-`;
-
-const ProductDesc = styled.p`
-  font-size: 0.875rem;
-  color: ${colors.textLight};
-  line-height: 1.5;
-`;
 
 const ContentCard = styled.div`
   background-color: #FFFFFF;
@@ -243,20 +282,26 @@ function IndustryDetailPage() {
               <p style={{ textAlign: 'center', color: colors.textLight, marginBottom: '2rem' }}>
                 Click on a product to enquire about specifications and pricing.
               </p>
-              <Grid smCols={1} lgCols={2} gap="1rem">
-                {products.map(product => (
-                  <ProductCard
-                    key={product.id}
-                    onClick={() => handleProductClick(product)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && handleProductClick(product)}
-                  >
-                    <ProductName>{product.name}</ProductName>
-                    <ProductDesc>{product.description}</ProductDesc>
-                  </ProductCard>
-                ))}
-              </Grid>
+              <ProductsContainer>
+                <ProductsCircle $count={products.length}>
+                  {products.map((product, index) => {
+                    const count = products.length;
+                    const angle = (360 / count) * index - 90; // Start from top
+                    const radius = count <= 4 ? 100 : count <= 6 ? 120 : 140;
+                    return (
+                      <ProductPill
+                        key={product.id}
+                        onClick={() => handleProductClick(product)}
+                        type="button"
+                        $angle={angle}
+                        $radius={radius}
+                      >
+                        {product.name}
+                      </ProductPill>
+                    );
+                  })}
+                </ProductsCircle>
+              </ProductsContainer>
             </ContentCard>
           </div>
         </Container>

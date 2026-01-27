@@ -4,7 +4,7 @@ import { colors } from '../themes/colors';
 import { Button } from './ui';
 import { useRouter } from 'next/router';
 import { INDUSTRIES } from '../data/industries';
-import { Product, getIndustriesForProduct } from '../data/products';
+import { Product } from '../data/products';
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -33,10 +33,10 @@ const Overlay = styled.div`
 
 const ModalContainer = styled.div`
   background: #FFFFFF;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   border-radius: 1rem;
   width: 100%;
-  max-width: 450px;
+  max-width: 420px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   animation: ${slideUp} 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
@@ -56,82 +56,60 @@ const CloseButton = styled.button`
 `;
 
 const QuestionTitle = styled.h2`
-  font-size: 1.375rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: ${colors.text};
   margin-bottom: 1.5rem;
-  line-height: 1.4;
+  line-height: 1.5;
 
   span {
     color: ${colors.primary};
+    font-weight: 800;
   }
 `;
 
-const Description = styled.p`
-  color: ${colors.textLight};
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
-  line-height: 1.6;
-`;
-
-const Label = styled.label`
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
+const Label = styled.p`
+  font-size: 1rem;
   color: ${colors.text};
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   text-align: left;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  
-  &:focus {
-    outline: none;
-    border-color: ${colors.primary};
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-  }
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  
-  &:focus {
-    outline: none;
-    border-color: ${colors.primary};
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-  }
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
   font-size: 1rem;
-  min-height: 80px;
-  resize: vertical;
-
+  
   &:focus {
     outline: none;
     border-color: ${colors.primary};
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
   }
+`;
+
+const SuccessMessage = styled.div`
+  padding: 1rem 0;
+`;
+
+const SuccessIcon = styled.div`
+  font-size: 3rem;
+  margin-bottom: 1rem;
+`;
+
+const SuccessTitle = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: ${colors.text};
+  margin-bottom: 0.5rem;
+`;
+
+const SuccessDescription = styled.p`
+  color: ${colors.textLight};
+  font-size: 0.875rem;
 `;
 
 interface ProductEnquiryModalProps {
@@ -147,21 +125,10 @@ export default function ProductEnquiryModal({
     product,
     currentIndustryId
 }: ProductEnquiryModalProps) {
-    const [formData, setFormData] = useState({
-        email: '',
-        industryId: currentIndustryId || '',
-        others: ''
-    });
+    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const router = useRouter();
-
-    // Get industries this product is used for
-    const relevantIndustryIds = product ? getIndustriesForProduct(product.id) : [];
-    const relevantIndustries = INDUSTRIES.filter(ind => relevantIndustryIds.includes(ind.id));
-
-    // If no specific mapping, show all industries
-    const industriesToShow = relevantIndustries.length > 0 ? relevantIndustries : INDUSTRIES;
 
     // Get current industry name for display
     const currentIndustry = INDUSTRIES.find(i => i.id === currentIndustryId);
@@ -170,21 +137,17 @@ export default function ProductEnquiryModal({
         if (isOpen) {
             const storedInfo = localStorage.getItem('oasis_user_info');
             if (storedInfo) {
-                const { email } = JSON.parse(storedInfo);
-                setFormData(prev => ({ ...prev, email: email || '', industryId: currentIndustryId || '' }));
-            } else {
-                setFormData(prev => ({ ...prev, industryId: currentIndustryId || '' }));
+                const { email: storedEmail } = JSON.parse(storedInfo);
+                if (storedEmail) setEmail(storedEmail);
             }
         }
-    }, [isOpen, currentIndustryId]);
+    }, [isOpen]);
 
     if (!isOpen || !product) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-
-        const selectedIndustry = INDUSTRIES.find(i => i.id === formData.industryId);
 
         try {
             const response = await fetch('/api/send-email', {
@@ -193,24 +156,23 @@ export default function ProductEnquiryModal({
                 body: JSON.stringify({
                     type: 'PRODUCT_ENQUIRY',
                     data: {
-                        email: formData.email,
+                        email,
                         product: product.name,
-                        industry: selectedIndustry?.title || 'Not specified',
-                        others: formData.others || 'None',
+                        industry: currentIndustry?.title || 'Not specified',
                         page: router.asPath,
-                        subject: `Product Enquiry: ${product.name} for ${selectedIndustry?.title || 'Unspecified Industry'}`
+                        subject: `Enquiry: ${currentIndustry?.title || 'Industry'} Standard Compliant ${product.name}`
                     }
                 }),
             });
 
             if (response.ok) {
                 setSuccess(true);
-                localStorage.setItem('oasis_user_info', JSON.stringify({ email: formData.email }));
+                localStorage.setItem('oasis_user_info', JSON.stringify({ email }));
 
                 setTimeout(() => {
                     onClose();
                     setSuccess(false);
-                    setFormData({ email: '', industryId: '', others: '' });
+                    setEmail('');
                 }, 2000);
             } else {
                 alert('Failed to send enquiry. Please try again.');
@@ -229,48 +191,29 @@ export default function ProductEnquiryModal({
                 <CloseButton onClick={onClose}>&times;</CloseButton>
 
                 {success ? (
-                    <div style={{ padding: '1rem 0' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-                        <QuestionTitle>Enquiry Sent!</QuestionTitle>
-                        <Description>Our team will contact you shortly about {product.name}.</Description>
-                    </div>
+                    <SuccessMessage>
+                        <SuccessIcon>✅</SuccessIcon>
+                        <SuccessTitle>Enquiry Sent!</SuccessTitle>
+                        <SuccessDescription>Our team will contact you shortly.</SuccessDescription>
+                    </SuccessMessage>
                 ) : (
                     <>
                         <QuestionTitle>
-                            Are you interested in <span>{product.name}</span> for <span>{currentIndustry?.title || 'your industry'}</span>?
+                            Are you looking for <span>{currentIndustry?.title || 'Industry'}</span> Standard Compliant <span>{product.name}</span>?
                         </QuestionTitle>
 
                         <form onSubmit={handleSubmit}>
-                            <Label>Email Address *</Label>
+                            <Label>Please share your Mail ID</Label>
                             <Input
                                 type="email"
                                 placeholder="your@email.com"
-                                value={formData.email}
-                                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                                 required
-                            />
-
-                            <Label>Industry *</Label>
-                            <Select
-                                value={formData.industryId}
-                                onChange={e => setFormData({ ...formData, industryId: e.target.value })}
-                                required
-                            >
-                                <option value="">Select your industry</option>
-                                {industriesToShow.map(ind => (
-                                    <option key={ind.id} value={ind.id}>{ind.title}</option>
-                                ))}
-                            </Select>
-
-                            <Label>Others (Optional)</Label>
-                            <TextArea
-                                placeholder="Any specific requirements or questions..."
-                                value={formData.others}
-                                onChange={e => setFormData({ ...formData, others: e.target.value })}
                             />
 
                             <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
-                                {loading ? 'Sending...' : 'Yes, Send Enquiry'}
+                                {loading ? 'Sending...' : 'Send'}
                             </Button>
                         </form>
                     </>

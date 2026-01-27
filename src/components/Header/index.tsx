@@ -10,7 +10,7 @@ const HeaderWrapper = styled.header`
   left: 0;
   width: 100%;
   height: 5rem;
-  background: linear-gradient(90deg, #991B1B 0%, #DC2626 100%);
+  background: linear-gradient(90deg, #FFFFFF 0%, #DC2626 100%);
   z-index: 50;
   display: flex;
   align-items: center;
