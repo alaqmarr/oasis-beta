@@ -6,6 +6,10 @@ import { colors } from '../../themes/colors';
 import { Container, Section, Grid, GlassCard } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
 import { CATEGORIES, Category } from '../../data/categories';
+import { getProductsForIndustry, Product } from '../../data/products';
+import { Industry } from '../../types';
+import IndustryProductsModal from '../../components/IndustryProductsModal';
+import ProductEnquiryModal from '../../components/ProductEnquiryModal';
 
 // All keywords for SEO (same on every page)
 const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
@@ -107,16 +111,34 @@ const ContentWrapper = styled.div`
   padding: 2rem;
 `;
 
-const SubIndustryLink = styled.a`
+const SubIndustryCard = styled.div`
   display: block;
   text-decoration: none;
 `;
 
 function IndustriesPage() {
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(null);
+    const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
+    const [enquiryIndustry, setEnquiryIndustry] = useState<Industry | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
     const toggleCategory = (id: string) => {
         setOpenCategoryId(openCategoryId === id ? null : id);
+    };
+
+    const handleIndustryClick = (industry: Industry) => {
+        setSelectedIndustry(industry);
+    };
+
+    const handleProductClick = (product: Product) => {
+        setEnquiryIndustry(selectedIndustry);
+        setSelectedProduct(product);
+        setIsProductModalOpen(true);
+        // Close industry modal logic handled by UI effectively replacing it or we can specifically set selectedIndustry null if we want to mimic page change
+        // But keeping it open in background might be confusing with overlays. 
+        // Let's close industry modal when product enquiry opens.
+        setSelectedIndustry(null);
     };
 
     return (
@@ -146,7 +168,7 @@ function IndustriesPage() {
                             // Find full industry objects for the sub-industries in this category
                             const subIndustries = category.subIndustries
                                 .map(id => INDUSTRIES.find(ind => ind.id === id))
-                                .filter(Boolean);
+                                .filter(Boolean) as Industry[];
 
                             return (
                                 <CategoryItem key={category.id} id={category.id}>
@@ -172,28 +194,26 @@ function IndustriesPage() {
                                         <ContentWrapper>
                                             {subIndustries.length > 0 ? (
                                                 <Grid smCols={1} lgCols={3} gap="2rem">
-                                                    {subIndustries.map((sub: any) => (
-                                                        <Link key={sub.id} href={`/industries/${sub.id}`} passHref legacyBehavior>
-                                                            <SubIndustryLink>
-                                                                <GlassCard style={{ height: '100%', cursor: 'pointer', transition: 'transform 0.2s', padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                                                                    <div style={{ height: '200px', width: '100%', position: 'relative' }}>
-                                                                        <img
-                                                                            src={sub.image}
-                                                                            alt={sub.title}
-                                                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                                        />
-                                                                    </div>
-                                                                    <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                                                                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem', color: colors.primary }}>
-                                                                            {sub.title}
-                                                                        </h3>
-                                                                        <p style={{ fontSize: '0.875rem', color: colors.textLight }}>
-                                                                            {sub.description}
-                                                                        </p>
-                                                                    </div>
-                                                                </GlassCard>
-                                                            </SubIndustryLink>
-                                                        </Link>
+                                                    {subIndustries.map((sub) => (
+                                                        <SubIndustryCard key={sub.id} onClick={() => handleIndustryClick(sub)}>
+                                                            <GlassCard style={{ height: '100%', cursor: 'pointer', transition: 'transform 0.2s', padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                                                <div style={{ height: '200px', width: '100%', position: 'relative' }}>
+                                                                    <img
+                                                                        src={sub.image}
+                                                                        alt={sub.title}
+                                                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                                    />
+                                                                </div>
+                                                                <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem', color: colors.primary }}>
+                                                                        {sub.title}
+                                                                    </h3>
+                                                                    <p style={{ fontSize: '0.875rem', color: colors.textLight }}>
+                                                                        {sub.description}
+                                                                    </p>
+                                                                </div>
+                                                            </GlassCard>
+                                                        </SubIndustryCard>
                                                     ))}
                                                 </Grid>
                                             ) : (
@@ -209,6 +229,23 @@ function IndustriesPage() {
                     </CategoryContainer>
                 </Container>
             </Section>
+
+            {/* Industry Products Modal */}
+            <IndustryProductsModal
+                isOpen={!!selectedIndustry}
+                onClose={() => setSelectedIndustry(null)}
+                industry={selectedIndustry}
+                products={selectedIndustry ? getProductsForIndustry(selectedIndustry.id) : []}
+                onProductClick={handleProductClick}
+            />
+
+            {/* Product Enquiry Modal */}
+            <ProductEnquiryModal
+                isOpen={isProductModalOpen}
+                onClose={() => setIsProductModalOpen(false)}
+                product={selectedProduct}
+                currentIndustryId={enquiryIndustry ? enquiryIndustry.id : undefined}
+            />
         </main>
     );
 }
