@@ -15,7 +15,7 @@ export const INDUSTRIES: Industry[] = [
       'Tire Manufacturing'
     ],
     products: ['Pressure Sensors', 'Flow Meters', 'Encoders', 'Limit Switches', 'Condition Monitoring'],
-    image: 'https://images.unsplash.com/photo-1553556538-4f514df95213?auto=format&fit=crop&q=80&w=1080'
+    image: 'https://unsplash.com/photos/gray-vehicle-being-fixed-inside-factory-using-robot-machines-jHZ70nRk7Ns'
   },
   {
     id: 'rail-transportation',
@@ -25,7 +25,7 @@ export const INDUSTRIES: Industry[] = [
       'Safety and reliability are paramount in rail transportation. We supply EN 50155 compliant sensors for rolling stock and trackside applications. From speed monitoring to bearing temperature analysis, our solutions help maintain the integrity of rail networks.',
     applications: ['Traction Control', 'Braking Systems', 'Door Control', 'Track Maintenance', 'Signaling Equipment'],
     products: ['Rail Sensors', 'Relays', 'Inertial Sensors', 'Temperature Sensors', 'Vacuum Contactors'],
-    image: 'https://images.unsplash.com/photo-1541697274094-149d56214197?auto=format&fit=crop&q=80&w=1080'
+    image: 'https://unsplash.com/photos/a-yellow-and-blue-freight-train-on-tracks-2dsIlufMgD8'
   },
   {
     id: 'thermal-power',
