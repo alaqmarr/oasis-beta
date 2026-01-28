@@ -25,7 +25,7 @@ export const INDUSTRIES: Industry[] = [
       'Safety and reliability are paramount in rail transportation. We supply EN 50155 compliant sensors for rolling stock and trackside applications. From speed monitoring to bearing temperature analysis, our solutions help maintain the integrity of rail networks.',
     applications: ['Traction Control', 'Braking Systems', 'Door Control', 'Track Maintenance', 'Signaling Equipment'],
     products: ['Rail Sensors', 'Relays', 'Inertial Sensors', 'Temperature Sensors', 'Vacuum Contactors'],
-    image: 'https://unsplash.com/photos/a-yellow-and-blue-freight-train-on-tracks-2dsIlufMgD8'
+    image: 'https://images.unsplash.com/photo-1760183925820-662f8a8b58ae?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHJhaWwlMjBpbmR1c3RyeXxlbnwwfHwwfHx8MA%3D%3D'
   },
   {
     id: 'thermal-power',
