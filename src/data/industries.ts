@@ -15,7 +15,7 @@ export const INDUSTRIES: Industry[] = [
       'Tire Manufacturing'
     ],
     products: ['Pressure Sensors', 'Flow Meters', 'Encoders', 'Limit Switches', 'Condition Monitoring'],
-    image: 'https://unsplash.com/photos/gray-vehicle-being-fixed-inside-factory-using-robot-machines-jHZ70nRk7Ns'
+    image: 'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXV0b21vdGl2ZSUyMGluZHVzdHJ5fGVufDB8fDB8fHww'
   },
   {
     id: 'rail-transportation',
