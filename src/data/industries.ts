@@ -15,7 +15,8 @@ export const INDUSTRIES: Industry[] = [
       'Tire Manufacturing'
     ],
     products: ['Pressure Sensors', 'Flow Meters', 'Encoders', 'Limit Switches', 'Condition Monitoring'],
-    image: 'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXV0b21vdGl2ZSUyMGluZHVzdHJ5fGVufDB8fDB8fHww'
+    image:
+      'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXV0b21vdGl2ZSUyMGluZHVzdHJ5fGVufDB8fDB8fHww'
   },
   {
     id: 'rail-transportation',
@@ -25,7 +26,8 @@ export const INDUSTRIES: Industry[] = [
       'Safety and reliability are paramount in rail transportation. We supply EN 50155 compliant sensors for rolling stock and trackside applications. From speed monitoring to bearing temperature analysis, our solutions help maintain the integrity of rail networks.',
     applications: ['Traction Control', 'Braking Systems', 'Door Control', 'Track Maintenance', 'Signaling Equipment'],
     products: ['Rail Sensors', 'Relays', 'Inertial Sensors', 'Temperature Sensors', 'Vacuum Contactors'],
-    image: 'https://images.unsplash.com/photo-1760183925820-662f8a8b58ae?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHJhaWwlMjBpbmR1c3RyeXxlbnwwfHwwfHx8MA%3D%3D'
+    image:
+      'https://images.unsplash.com/photo-1760183925820-662f8a8b58ae?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHJhaWwlMjBpbmR1c3RyeXxlbnwwfHwwfHx8MA%3D%3D'
   },
   {
     id: 'thermal-power',
@@ -41,7 +43,8 @@ export const INDUSTRIES: Industry[] = [
       'Ash Handling'
     ],
     products: ['Flow Meters', 'Pressure Sensors', 'Temperature Sensors', 'Condition Monitoring', 'Radar Level Sensors'],
-    image: 'https://images.unsplash.com/photo-1565610850238-765f3f090ca9?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1585252155261-cff31944d781?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'hydel-power',
@@ -57,7 +60,8 @@ export const INDUSTRIES: Industry[] = [
       'Generator Protection'
     ],
     products: ['Flow Meters', 'Encoders', 'Radar Level Sensors', 'Condition Monitoring', 'Relays'],
-    image: 'https://images.unsplash.com/photo-1461958508236-9a742665a0d5?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1705747894609-6a7d17a8cfb7?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'nuclear-power',
@@ -73,7 +77,8 @@ export const INDUSTRIES: Industry[] = [
       'Waste Handling'
     ],
     products: ['Pressure Sensors', 'Flow Meters', 'Limit Switches', 'Vacuum Contactors', 'Temperature Sensors'],
-    image: 'https://images.unsplash.com/photo-1569083547900-33afc8752d8e?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1630142896875-d71a6ee6db03?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'wind-energy',
@@ -83,7 +88,8 @@ export const INDUSTRIES: Industry[] = [
       'Maximizing wind energy capture requires precise control. Our encoders and sensors monitor blade pitch, yaw position, and generator speed. Our condition monitoring systems help predict maintenance needs for offshore and onshore turbines.',
     applications: ['Pitch Control', 'Yaw Control', 'Generator Speed', 'Tower Vibration', 'Nacelle Orientation'],
     products: ['Encoders', 'Inertial Sensors', 'Condition Monitoring', 'Limit Switches', 'Relays'],
-    image: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1562519990-50eb51e282b2?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'electrical-machines',
@@ -99,7 +105,8 @@ export const INDUSTRIES: Industry[] = [
       'Thermal Monitoring'
     ],
     products: ['Vacuum Contactors', 'Temperature Sensors', 'Condition Monitoring', 'Relays', 'Encoders'],
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1738918929491-3c102ce11c8a?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'defence',
@@ -115,7 +122,8 @@ export const INDUSTRIES: Industry[] = [
       'Radar Systems'
     ],
     products: ['Inertial Sensors', 'Encoders', 'Pressure Sensors', 'Relays', 'Limit Switches'],
-    image: 'https://images.unsplash.com/photo-1595186987766-0740b2f54070?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1542876975-6334b6aeb70d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'mining',
@@ -137,7 +145,8 @@ export const INDUSTRIES: Industry[] = [
       'Flow Meters',
       'Vacuum Contactors'
     ],
-    image: 'https://images.unsplash.com/photo-1579532884949-a35985060d4b?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1523848309072-c199db53f137?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWluaW5nfGVufDB8fDB8fHww'
   },
   {
     id: 'heavy-engineering',
@@ -153,7 +162,8 @@ export const INDUSTRIES: Industry[] = [
       'Steel Structure Assembly'
     ],
     products: ['Encoders', 'Pressure Sensors', 'Limit Switches', 'Inertial Sensors', 'Relays'],
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1769247178321-e226a0a7c941?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'steel-plants',
@@ -169,7 +179,8 @@ export const INDUSTRIES: Industry[] = [
       'Cooling Water Flow'
     ],
     products: ['Temperature Sensors', 'Encoders', 'Flow Meters', 'Vacuum Contactors', 'Heavy Duty Limit Switches'],
-    image: 'https://images.unsplash.com/photo-1518706342898-1fdce767cc32?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1624027492684-327af1fb7559?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'energy-storage-panels',
@@ -185,7 +196,8 @@ export const INDUSTRIES: Industry[] = [
       'Safety Systems'
     ],
     products: ['Temperature Sensors', 'Vibration Sensors'],
-    image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1592318348310-f31b61a931c8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'valve-automation',
@@ -201,7 +213,8 @@ export const INDUSTRIES: Industry[] = [
       'Tank Farm Management'
     ],
     products: ['Limit Switches', 'Pressure Sensors', 'Flow Meters', 'Relays', 'Encoders'],
-    image: 'https://images.unsplash.com/photo-1507646549556-07755b40d6c9?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1758873263491-f3969d8c6fda?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'cnc-machines',
@@ -211,7 +224,8 @@ export const INDUSTRIES: Industry[] = [
       'CNC machines require micron-level precision. Our high-resolution encoders and responsive servo systems enable machine tools to achieve the accuracy and surface finish required in modern manufacturing.',
     applications: ['Spindle Control', 'Axis Positioning', 'Tool Changing', 'Coolant Systems', 'Workpiece Measurement'],
     products: ['Encoders', 'Servo Motors & Drives', 'Relays', 'Flow Meters', 'Limit Switches'],
-    image: 'https://images.unsplash.com/photo-1596752765373-c827b5f25752?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1711418235334-8895331a6cf9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'oil-gas',
@@ -227,7 +241,8 @@ export const INDUSTRIES: Industry[] = [
       'Safety Shutdown Systems'
     ],
     products: ['Flow Meters', 'Pressure Sensors', 'Radar Level Sensors', 'Temperature Sensors', 'Valve Automation'],
-    image: 'https://images.unsplash.com/photo-1582046554553-6258aa6f376a?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1516937941344-00b4e0337589?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'cement',
@@ -249,7 +264,8 @@ export const INDUSTRIES: Industry[] = [
       'Condition Monitoring',
       'Flow Meters'
     ],
-    image: 'https://images.unsplash.com/photo-1598048601831-9258296c05d7?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1560435650-7ec2e17ba926?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'paper',
@@ -265,7 +281,8 @@ export const INDUSTRIES: Industry[] = [
       'Chemical Dosing'
     ],
     products: ['Encoders', 'Flow Meters', 'Temperature Sensors', 'Pressure Sensors', 'Relays'],
-    image: 'https://images.unsplash.com/photo-1588619623869-7c8a32bb4387?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1503694978374-8a2fa686963a?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'food-processing',
@@ -275,7 +292,8 @@ export const INDUSTRIES: Industry[] = [
       'Hygiene and accuracy are key in food processing. We offer sanitary flow meters and sensors designed for CIP/SIP processes, ensuring food safety and consistent product quality.',
     applications: ['Mixing & Blending', 'Pasteurization', 'Filling Machines', 'CIP Systems', 'Packaging'],
     products: ['Flow Meters', 'Temperature Sensors', 'Pressure Sensors', 'Counters', 'Industrial Printers'],
-    image: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1652211955967-99c892925469?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'breweries',
@@ -285,7 +303,8 @@ export const INDUSTRIES: Industry[] = [
       'Brewing is a delicate art requiring precise temperature and flow control. Our instrumentation helps master brewers maintain the perfect conditions for fermentation and filtration, ensuring the perfect brew every time.',
     applications: ['Mash Tun Temp', 'Fermentation Control', 'Filtration Flow', 'Kegging Lines', 'Bottle Labeling'],
     products: ['Temperature Sensors', 'Flow Meters', 'Pressure Sensors', 'Industrial Printers', 'Counters'],
-    image: 'https://images.unsplash.com/photo-1600255821058-c4f9f6c6a61e?auto=format&fit=crop&q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1655714739588-4b211415f814?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'water-waste-management',
@@ -301,6 +320,7 @@ export const INDUSTRIES: Industry[] = [
       'Leak Detection'
     ],
     products: ['Flow Meters', 'Radar Level Sensors', 'Analysis Sensors', 'Pressure Sensors', 'Vacuum Contactors'],
-    image: 'https://images.unsplash.com/photo-1725581561083-f6d6f3558aea?q=80&w=1080'
+    image:
+      'https://images.unsplash.com/photo-1725581561083-f6d6f3558aea?q=80&w=1132&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   }
 ];

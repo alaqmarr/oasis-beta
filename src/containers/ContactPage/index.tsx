@@ -261,7 +261,7 @@ function ContactPage() {
                   United Arab Emirates.
                 </InfoText>
                 <div style={{ marginTop: '1rem' }}>
-                  <InfoText><strong>Phone:</strong> +971 505750802</InfoText>
+                  <InfoText><strong>Phone:</strong> +971 42542350</InfoText>
                   <InfoText><strong>Email:</strong> office@lucent-is.com</InfoText>
                 </div>
               </InfoCard>
