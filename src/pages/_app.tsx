@@ -54,22 +54,39 @@ function PageInteractionHandler() {
       }
 
       if (!hasSubmitted && !userEmail) {
-        const hasSeenPopup = sessionStorage.getItem('hasSeenPopup');
+        const popupSeenData = localStorage.getItem('popupSeenTimestamp');
 
-        if (!hasSeenPopup && !shownPagesRef.current.has('/')) {
+        const now = Date.now();
+        const fourDaysMs = 4 * 24 * 60 * 60 * 1000;
+        let shouldShow = true;
+
+        if (popupSeenData) {
+          const lastSeen = parseInt(popupSeenData, 10);
+          if (now - lastSeen < fourDaysMs) {
+            shouldShow = false;
+          }
+        }
+
+        if (shouldShow && !shownPagesRef.current.has('/')) {
           timeoutId = setTimeout(() => {
-            // Check again inside timeout in case user navigated or something changed
-            if (!hasSubmitted && !userEmail && !sessionStorage.getItem('hasSeenPopup')) {
+            const currentSeenData = localStorage.getItem('popupSeenTimestamp');
+            let stillShow = true;
+            if (currentSeenData) {
+              const last = parseInt(currentSeenData, 10);
+              if (Date.now() - last < fourDaysMs) stillShow = false;
+            }
+
+            if (!hasSubmitted && !userEmail && stillShow) {
               openEnquiryModal({
                 title: 'Welcome to Oasis Group',
                 description: 'We are your partner for industrial automation and instrumentation. How can we help you today?',
                 subject: 'Proactive Welcome Popup'
               });
 
-              sessionStorage.setItem('hasSeenPopup', 'true');
+              localStorage.setItem('popupSeenTimestamp', Date.now().toString());
               shownPagesRef.current.add('/');
             }
-          }, 5000); // Reduced to 5s for better UX on first visit, or keep 15s? User said "welcome popup", usually shorter delay.
+          }, 5000);
         }
       }
     };
