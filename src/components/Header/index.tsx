@@ -166,7 +166,7 @@ function Header() {
         <Nav>
           <Link href="/" passHref legacyBehavior>
             <Logo>
-              <img src="/logo.jpg.jpeg" alt="Oasis Group Logo" style={{ height: '3rem', width: 'auto' }} />
+              <img src="/oasis-logo.png" alt="Oasis Group Logo" style={{ height: '3rem', width: 'auto' }} />
             </Logo>
           </Link>
 
@@ -180,6 +180,7 @@ function Header() {
             <Link href="/" passHref legacyBehavior><NavLink $isActive={router.pathname === '/'}>Home</NavLink></Link>
             <Link href="/about" passHref legacyBehavior><NavLink $isActive={isActive('/about')}>About Us</NavLink></Link>
             <Link href="/industries" passHref legacyBehavior><NavLink $isActive={isActive('/industries')}>Industries</NavLink></Link>
+            <Link href="/resources" passHref legacyBehavior><NavLink $isActive={isActive('/resources')}>Resources</NavLink></Link>
             <Link href="/contact" passHref legacyBehavior>
               <Button style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}>Contact Us</Button>
             </Link>
@@ -189,6 +190,7 @@ function Header() {
             <Link href="/" passHref legacyBehavior><MobileNavLink $isActive={router.pathname === '/'} onClick={toggleMenu}>Home</MobileNavLink></Link>
             <Link href="/about" passHref legacyBehavior><MobileNavLink $isActive={isActive('/about')} onClick={toggleMenu}>About Us</MobileNavLink></Link>
             <Link href="/industries" passHref legacyBehavior><MobileNavLink $isActive={isActive('/industries')} onClick={toggleMenu}>Industries</MobileNavLink></Link>
+            <Link href="/resources" passHref legacyBehavior><MobileNavLink $isActive={isActive('/resources')} onClick={toggleMenu}>Resources</MobileNavLink></Link>
             <Link href="/contact" passHref legacyBehavior>
               <Button onClick={toggleMenu} style={{ marginTop: '1rem', width: '100%', textAlign: 'center' }}>Contact Us</Button>
             </Link>

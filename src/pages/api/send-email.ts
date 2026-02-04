@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 // Dummy credentials - User to replace these
 const EMAIL_USER = process.env.EMAIL_USER || 'dummy_user@gmail.com';
 const EMAIL_PASS = process.env.EMAIL_PASS || 'dummy_password';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@oasisgroup.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'office@oasis-group.co.in';
 const DUMP_EMAIL = process.env.DUMP_EMAIL || 'dump@oasisgroup.com';
 
 const transporter = nodemailer.createTransport({

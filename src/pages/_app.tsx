@@ -48,8 +48,8 @@ function PageInteractionHandler() {
     let timeoutId: NodeJS.Timeout;
 
     const handleProactivePopup = () => {
-      const excludedPaths = ['/contact'];
-      if (excludedPaths.includes(router.pathname)) {
+      // Only show popup on Home Page
+      if (router.pathname !== '/') {
         return;
       }
 

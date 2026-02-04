@@ -63,8 +63,7 @@ function Footer() {
 
                     <div>
                         <FooterTitle>Contact</FooterTitle>
-                        <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>Plot – 2, TGSIC Industrial Park</p>
-                        <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>Genome Valley, Hyderabad</p>
+
                         <p style={{ color: '#FECACA', marginBottom: '0.5rem' }}>+91-91210 84141</p>
                         <p style={{ color: '#FECACA' }}>office@oasis-group.co.in</p>
                     </div>
