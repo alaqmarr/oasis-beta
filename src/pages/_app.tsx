@@ -54,32 +54,22 @@ function PageInteractionHandler() {
       }
 
       if (!hasSubmitted && !userEmail) {
-        const currentPath = router.asPath;
+        const hasSeenPopup = sessionStorage.getItem('hasSeenPopup');
 
-        if (!shownPagesRef.current.has(currentPath)) {
+        if (!hasSeenPopup && !shownPagesRef.current.has('/')) {
           timeoutId = setTimeout(() => {
-            if (!hasSubmitted && !userEmail && !shownPagesRef.current.has(currentPath)) {
-              let pageName = router.pathname.split('/').pop() || 'Home';
-
-              // Handle dynamic routes like [slug]
-              if (pageName === '[slug]' && router.query.slug) {
-                pageName = Array.isArray(router.query.slug) ? router.query.slug[0] : router.query.slug;
-              }
-
-              const formattedPageName = pageName === 'Home' || pageName === '' ? 'Oasis Group' : pageName.charAt(0).toUpperCase() + pageName.slice(1).replace(/-/g, ' ');
-
-              let gist = 'Oasis Group is your partner for industrial automation and instrumentation.';
-              if (router.pathname.includes('industries')) gist = 'Discover how we serve your industry. Request our sector-specific case studies.';
-
+            // Check again inside timeout in case user navigated or something changed
+            if (!hasSubmitted && !userEmail && !sessionStorage.getItem('hasSeenPopup')) {
               openEnquiryModal({
-                title: `Interested in ${formattedPageName}?`,
-                description: gist,
-                subject: `Proactive Enquiry from ${currentPath}`
+                title: 'Welcome to Oasis Group',
+                description: 'We are your partner for industrial automation and instrumentation. How can we help you today?',
+                subject: 'Proactive Welcome Popup'
               });
 
-              shownPagesRef.current.add(currentPath);
+              sessionStorage.setItem('hasSeenPopup', 'true');
+              shownPagesRef.current.add('/');
             }
-          }, 15000);
+          }, 5000); // Reduced to 5s for better UX on first visit, or keep 15s? User said "welcome popup", usually shorter delay.
         }
       }
     };
