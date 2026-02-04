@@ -240,7 +240,7 @@ function ContactPage() {
               <InfoCard>
                 <InfoTitle>Oasis Group (Headquarters)</InfoTitle>
                 <InfoText>
-                  Plot – 2, TSIIC Industrial Park,<br />
+                  Plot – 2, TGIIC Industrial Park,<br />
                   Survey No. 226(P) & 227,<br />
                   Genome Valley, Turkapally Village,<br />
                   Medchal-Malkajgiri District,<br />
