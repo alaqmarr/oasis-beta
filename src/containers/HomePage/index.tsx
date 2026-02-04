@@ -8,7 +8,7 @@ import ProductShowcase from '../../components/ProductShowcase';
 import HeroCarousel from '../../components/HeroCarousel';
 import { Reveal } from '../../components/Reveal';
 import { LiquidText } from '../../components/ui/LiquidText';
-import UserCaptureModal from '../../components/UserCaptureModal';
+
 
 const HeroSection = styled.section`
   width: 100%;
@@ -68,7 +68,7 @@ const StatLabel = styled.div`
 function HomePage() {
     return (
         <main>
-            <UserCaptureModal />
+
             <HeroCarousel />
             <Section>
                 <Container>
