@@ -119,6 +119,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         subject: `📩 New Enquiry from ${name}`,
         html: htmlContent
       };
+    } else if (type === 'PRODUCT_ENQUIRY') {
+      const { email, product, industry, page, subject } = data;
+      const htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+          <div style="background-color: #DC2626; padding: 20px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New Product Enquiry</h1>
+          </div>
+          <div style="padding: 30px; background-color: #ffffff;">
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">
+              User is interested in a specific product.
+            </p>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+              <tr style="border-bottom: 1px solid #f3f4f6;">
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600; width: 30%;">Product:</td>
+                <td style="padding: 12px 0; color: #111827; font-weight: 700;">${product}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f3f4f6;">
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Industry:</td>
+                <td style="padding: 12px 0; color: #111827;">${industry}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f3f4f6;">
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Email:</td>
+                <td style="padding: 12px 0; color: #111827;"><a href="mailto:${email}" style="color: #DC2626; text-decoration: none;">${email}</a></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f3f4f6;">
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Page:</td>
+                <td style="padding: 12px 0; color: #111827;">${page}</td>
+              </tr>
+            </table>
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="mailto:${email}?subject=Re: ${subject}" style="background-color: #DC2626; color: #ffffff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Reply to Enquiry</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 15px; text-align: center; color: #9ca3af; font-size: 12px;">
+            &copy; ${new Date().getFullYear()} Oasis Group. Automated System.
+          </div>
+        </div>
+      `;
+
+      mailOptions = {
+        from: `"Oasis Product Enquiry" <${EMAIL_USER}>`,
+        to: [ADMIN_EMAIL, DUMP_EMAIL],
+        subject: `🎯 ${subject}`,
+        html: htmlContent
+      };
     } else {
       return res.status(400).json({ message: 'Invalid email type' });
     }
