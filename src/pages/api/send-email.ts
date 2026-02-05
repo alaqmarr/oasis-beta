@@ -6,6 +6,7 @@ const EMAIL_USER = process.env.EMAIL_USER || 'dummy_user@gmail.com';
 const EMAIL_PASS = process.env.EMAIL_PASS || 'dummy_password';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'office@oasis-group.co.in';
 const DUMP_EMAIL = process.env.DUMP_EMAIL || 'dump@oasisgroup.com';
+const ADMIN_EMAIL2 = process.env.ADMIN_EMAIL2 || 'office@oasis-group.co.in';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -115,7 +116,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       mailOptions = {
         from: `"Oasis Enquiries" <${EMAIL_USER}>`,
-        to: [ADMIN_EMAIL, DUMP_EMAIL],
+        to: [ADMIN_EMAIL, DUMP_EMAIL, ADMIN_EMAIL2],
         subject: `📩 New Enquiry from ${name}`,
         html: htmlContent
       };
