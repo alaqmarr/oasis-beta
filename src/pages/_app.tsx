@@ -191,7 +191,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <meta name="geo.region" content="IN" />
           <meta name="geo.country" content="India" />
 
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/oasis-logo.jpg" />
           <link rel="canonical" href="https://oasisgroup.com" />
         </Head>
         <GlobalStyle />
