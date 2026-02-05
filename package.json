@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "deep-email-validator": "^0.1.21",
     "next": "^16.0.8",
     "nodemailer": "^7.0.11",
     "react": "^19.2.0",

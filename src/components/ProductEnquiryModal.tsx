@@ -113,112 +113,115 @@ const SuccessDescription = styled.p`
 `;
 
 interface ProductEnquiryModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    product: Product | null;
-    currentIndustryId?: string;
+  isOpen: boolean;
+  onClose: () => void;
+  product: Product | null;
+  currentIndustryId?: string;
 }
 
 export default function ProductEnquiryModal({
-    isOpen,
-    onClose,
-    product,
-    currentIndustryId
+  isOpen,
+  onClose,
+  product,
+  currentIndustryId
 }: ProductEnquiryModalProps) {
-    const [email, setEmail] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
-    // Get current industry name for display
-    const currentIndustry = INDUSTRIES.find(i => i.id === currentIndustryId);
+  // Get current industry name for display
+  const currentIndustry = INDUSTRIES.find(i => i.id === currentIndustryId);
 
-    useEffect(() => {
-        if (isOpen) {
-            const storedInfo = localStorage.getItem('oasis_user_info');
-            if (storedInfo) {
-                const { email: storedEmail } = JSON.parse(storedInfo);
-                if (storedEmail) setEmail(storedEmail);
-            }
-        }
-    }, [isOpen]);
+  useEffect(() => {
+    if (isOpen) {
+      const storedInfo = localStorage.getItem('oasis_user_info');
+      if (storedInfo) {
+        const { email: storedEmail } = JSON.parse(storedInfo);
+        if (storedEmail) setEmail(storedEmail);
+      }
+    }
+  }, [isOpen]);
 
-    if (!isOpen || !product) return null;
+  if (!isOpen || !product) return null;
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-        try {
-            const response = await fetch('/api/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'PRODUCT_ENQUIRY',
-                    data: {
-                        email,
-                        product: product.name,
-                        industry: currentIndustry?.title || 'Not specified',
-                        page: router.asPath,
-                        subject: `Enquiry: ${currentIndustry?.title || 'Industry'} Standard Compliant ${product.name}`
-                    }
-                }),
-            });
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'PRODUCT_ENQUIRY',
+          data: {
+            email,
+            product: product.name,
+            industry: currentIndustry?.title || 'Not specified',
+            page: router.asPath,
+            subject: `Enquiry: ${currentIndustry?.title || 'Industry'} Standard Compliant ${product.name}`
+          }
+        }),
+      });
 
-            if (response.ok) {
-                setSuccess(true);
-                localStorage.setItem('oasis_user_info', JSON.stringify({ email }));
+      if (response.ok) {
+        setSuccess(true);
+        localStorage.setItem('oasis_user_info', JSON.stringify({ email }));
 
-                setTimeout(() => {
-                    onClose();
-                    setSuccess(false);
-                    setEmail('');
-                }, 2000);
-            } else {
-                alert('Failed to send enquiry. Please try again.');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('An error occurred.');
-        } finally {
-            setLoading(false);
-        }
-    };
+        setTimeout(() => {
+          onClose();
+          setSuccess(false);
+          setEmail('');
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to send enquiry. Please try again.');
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <Overlay onClick={onClose}>
-            <ModalContainer onClick={e => e.stopPropagation()}>
-                <CloseButton onClick={onClose}>&times;</CloseButton>
+  return (
+    <Overlay onClick={onClose}>
+      <ModalContainer onClick={e => e.stopPropagation()}>
+        <CloseButton onClick={onClose}>&times;</CloseButton>
 
-                {success ? (
-                    <SuccessMessage>
-                        <SuccessIcon>✅</SuccessIcon>
-                        <SuccessTitle>Enquiry Sent!</SuccessTitle>
-                        <SuccessDescription>Our team will contact you shortly.</SuccessDescription>
-                    </SuccessMessage>
-                ) : (
-                    <>
-                        <QuestionTitle>
-                            Are you looking for <span>{currentIndustry?.title || 'Industry'}</span> Standard Compliant <span>{product.name}</span>?
-                        </QuestionTitle>
+        {success ? (
+          <SuccessMessage>
+            <SuccessIcon>✅</SuccessIcon>
+            <SuccessTitle>Enquiry Sent!</SuccessTitle>
+            <SuccessDescription>Our team will contact you shortly.</SuccessDescription>
+          </SuccessMessage>
+        ) : (
+          <>
+            <QuestionTitle>
+              Are you looking for <span>{currentIndustry?.title || 'Industry'}</span> Standard Compliant <span>{product.name}</span>?
+            </QuestionTitle>
 
-                        <form onSubmit={handleSubmit}>
-                            <Label>Please share your Mail ID</Label>
-                            <Input
-                                type="email"
-                                placeholder="your@email.com"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                required
-                            />
+            <form onSubmit={handleSubmit}>
+              <Label>Please share your Mail ID</Label>
+              <Input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+              />
 
-                            <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
-                                {loading ? 'Sending...' : 'Send'}
-                            </Button>
-                        </form>
-                    </>
-                )}
-            </ModalContainer>
-        </Overlay>
-    );
+              <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
+                {loading ? 'Sending...' : 'Send'}
+              </Button>
+            </form>
+          </>
+        )}
+      </ModalContainer>
+    </Overlay>
+  );
 }

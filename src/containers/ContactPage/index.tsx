@@ -114,6 +114,7 @@ function ContactPage() {
     message: ''
   });
   const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -141,7 +142,10 @@ function ContactPage() {
       if (response.ok) {
         setStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
+        setErrorMessage('');
       } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Failed to send message.');
         setStatus('error');
       }
     } catch (error) {
@@ -212,7 +216,7 @@ function ContactPage() {
 
                 {status === 'error' && (
                   <div style={{ color: '#DC2626', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#FEF2F2', borderRadius: '0.25rem' }}>
-                    Failed to send message. Please try again or contact us directly via email.
+                    {errorMessage || 'Failed to send message. Please try again or contact us directly via email.'}
                   </div>
                 )}
 

@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
+// @ts-ignore
+import { validate } from 'deep-email-validator';
 
 // Dummy credentials - User to replace these
 const EMAIL_USER = process.env.EMAIL_USER || 'dummy_user@gmail.com';
@@ -22,6 +24,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { type, data } = req.body;
+
+  // Email Verification
+  if (data?.email) {
+    const { valid, reason, validators } = await validate({
+      email: data.email,
+      sender: data.email,
+      validateRegex: true,
+      validateMx: true,
+      validateTypo: true,
+      validateDisposable: true,
+      validateSMTP: false // Too slow/unreliable for this use case often
+    });
+
+    if (!valid) {
+      let errorMessage = 'Invalid email address.';
+      if (reason === 'typo') errorMessage = `Did you mean ${validators[reason]?.reason}?`;
+      else if (reason === 'disposable') errorMessage = 'Disposable email addresses are not allowed.';
+      else if (reason === 'mx') errorMessage = 'This email domain does not exist.';
+      else if (reason === 'regex') errorMessage = 'Invalid email format.';
+
+      return res.status(400).json({ message: errorMessage });
+    }
+  }
 
   try {
     let mailOptions;

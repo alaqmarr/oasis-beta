@@ -137,7 +137,10 @@ export default function EnquiryModal() {
           setEmail('');
         }, 2000);
       } else {
-        alert('Failed to submit. Please try again.');
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to submit. Please try again.');
+        setLoading(false);
+        return;
       }
     } catch (error) {
       console.error(error);
