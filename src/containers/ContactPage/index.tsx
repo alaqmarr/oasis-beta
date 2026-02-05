@@ -126,16 +126,20 @@ function ContactPage() {
     setStatus('loading');
 
     try {
-      const response = await fetch('/api/enquiry', {
+      const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: formData.email,
-          subject: formData.subject,
-          message: `Name: ${formData.name}\n\n${formData.message}`,
-          page: 'Contact Page'
+          type: 'ENQUIRY',
+          data: {
+            name: formData.name,
+            email: formData.email,
+            message: `Subject: ${formData.subject}\n\n${formData.message}`,
+            company: 'N/A', // Field not in form
+            phone: 'N/A'    // Field not in form
+          }
         }),
       });
 
