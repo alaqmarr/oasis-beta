@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 // @ts-ignore
 import { validate } from 'deep-email-validator';
+// @ts-ignore
+import geoip from 'geoip-lite';
 
 // Dummy credentials - User to replace these
 const EMAIL_USER = process.env.EMAIL_USER || 'dummy_user@gmail.com';
@@ -24,6 +26,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { type, data } = req.body;
+
+  // IP & Location Tracking
+  let ip = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '';
+  if (ip.includes(',')) ip = ip.split(',')[0].trim();
+
+  // Localhost check
+  if (ip === '::1' || ip === '127.0.0.1') ip = '8.8.8.8'; // Mock IP for local testing (Google DNS)
+
+  const geo = geoip.lookup(ip);
+  const location = geo ? `${geo.city}, ${geo.country}` : 'Unknown Location';
 
   // Email Verification
   if (data?.email) {
@@ -79,6 +91,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Time:</td>
                 <td style="padding: 12px 0; color: #111827;">${new Date().toLocaleString()}</td>
               </tr>
+              <tr>
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Location:</td>
+                <td style="padding: 12px 0; color: #111827;">${location} (${ip})</td>
+              </tr>
             </table>
             <div style="text-align: center; margin-top: 30px;">
               <a href="mailto:${email}" style="background-color: #1f2937; color: #ffffff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Contact Visitor</a>
@@ -128,6 +144,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 <td style="padding: 12px 0; color: #6b7280; font-weight: 600; vertical-align: top;">Message:</td>
                 <td style="padding: 12px 0; color: #111827;">${message}</td>
               </tr>
+              <tr style="border-top: 1px solid #f3f4f6;">
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Location:</td>
+                <td style="padding: 12px 0; color: #111827;">${location} (${ip})</td>
+              </tr>
             </table>
             <div style="text-align: center; margin-top: 30px;">
               <a href="mailto:${email}" style="background-color: #DC2626; color: #ffffff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Reply to Enquiry</a>
@@ -172,6 +192,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               <tr style="border-bottom: 1px solid #f3f4f6;">
                 <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Page:</td>
                 <td style="padding: 12px 0; color: #111827;">${page}</td>
+              </tr>
+              <tr style="border-top: 1px solid #f3f4f6;">
+                <td style="padding: 12px 0; color: #6b7280; font-weight: 600;">Location:</td>
+                <td style="padding: 12px 0; color: #111827;">${location} (${ip})</td>
               </tr>
             </table>
             <div style="text-align: center; margin-top: 30px;">
