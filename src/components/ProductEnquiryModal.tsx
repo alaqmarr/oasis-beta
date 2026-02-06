@@ -128,6 +128,7 @@ export default function ProductEnquiryModal({
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   // Get current industry name for display
@@ -168,6 +169,7 @@ export default function ProductEnquiryModal({
       if (response.ok) {
         setSuccess(true);
         localStorage.setItem('oasis_user_info', JSON.stringify({ email }));
+        setErrorMessage('');
 
         setTimeout(() => {
           onClose();
@@ -176,13 +178,13 @@ export default function ProductEnquiryModal({
         }, 2000);
       } else {
         const errorData = await response.json();
-        alert(errorData.message || 'Failed to send enquiry. Please try again.');
+        setErrorMessage(errorData.message || 'Failed to send enquiry. Please try again.');
         setLoading(false);
         return;
       }
     } catch (error) {
       console.error(error);
-      alert('An error occurred.');
+      setErrorMessage('An error occurred. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -214,6 +216,12 @@ export default function ProductEnquiryModal({
                 onChange={e => setEmail(e.target.value)}
                 required
               />
+
+              {errorMessage && (
+                <div style={{ color: '#DC2626', fontSize: '0.875rem', marginBottom: '1rem', marginTop: '-0.5rem', textAlign: 'left', padding: '0.5rem', backgroundColor: '#FEF2F2', borderRadius: '0.5rem' }}>
+                  {errorMessage}
+                </div>
+              )}
 
               <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
                 {loading ? 'Sending...' : 'Send'}

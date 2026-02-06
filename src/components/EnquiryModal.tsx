@@ -94,6 +94,7 @@ export default function EnquiryModal() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -130,6 +131,7 @@ export default function EnquiryModal() {
         setSuccess(true);
         setUserEmail(email);
         localStorage.setItem('oasis_user_info', JSON.stringify({ email }));
+        setErrorMessage('');
 
         setTimeout(() => {
           closeEnquiryModal();
@@ -138,13 +140,13 @@ export default function EnquiryModal() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        alert(errorData.message || 'Failed to submit. Please try again.');
+        setErrorMessage(errorData.message || 'Failed to submit. Please try again.');
         setLoading(false);
         return;
       }
     } catch (error) {
       console.error(error);
-      alert('An error occurred.');
+      setErrorMessage('An error occurred. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -176,6 +178,12 @@ export default function EnquiryModal() {
                 onChange={e => setEmail(e.target.value)}
                 required
               />
+
+              {errorMessage && (
+                <div style={{ color: '#DC2626', fontSize: '0.875rem', marginBottom: '1rem', marginTop: '-0.5rem', textAlign: 'left', padding: '0.5rem', backgroundColor: '#FEF2F2', borderRadius: '0.5rem' }}>
+                  {errorMessage}
+                </div>
+              )}
 
               <Button as="button" type="submit" style={{ width: '100%' }} disabled={loading}>
                 {loading ? 'Submitting...' : 'Yes, I\'m Interested'}
