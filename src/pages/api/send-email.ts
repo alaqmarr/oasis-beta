@@ -285,7 +285,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       mailOptions = {
         from: `"Oasis Product Enquiry" <${EMAIL_USER}>`,
-        to: [ADMIN_EMAIL, DUMP_EMAIL],
+        to: [ADMIN_EMAIL, DUMP_EMAIL, ADMIN_EMAIL2],
         subject: `🎯 ${subject}`,
         html: htmlContent
       };
