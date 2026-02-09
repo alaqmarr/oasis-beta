@@ -97,15 +97,31 @@ async function validateEmailRobust(email: string): Promise<{ valid: boolean; mes
     return { valid: true };
     
   } catch (error: any) {
-    // DNS lookup failed
-    if (error.code === 'ENOTFOUND' || error.code === 'ENODATA') {
+    // DNS lookup failed - reject the email
+    if (error.code === 'ENOTFOUND') {
       return { valid: false, message: 'This email domain does not exist' };
     }
     
-    // For other DNS errors (timeout, etc.), be lenient and accept the email
-    // Better to accept a potentially invalid email than reject a valid one
-    console.warn(`DNS lookup warning for ${domain}:`, error.message);
-    return { valid: true };
+    if (error.code === 'ENODATA') {
+      return { valid: false, message: 'This email domain cannot receive emails (no MX records)' };
+    }
+    
+    if (error.code === 'ETIMEOUT' || error.code === 'ESERVFAIL') {
+      // DNS timeout or server failure - try alternative validation
+      // Check if domain exists using A/AAAA records as fallback
+      try {
+        const dnsResolve = promisify(dns.resolve);
+        await dnsResolve(domain, 'A');
+        // Domain exists but no MX - might still work (some use A records)
+        return { valid: true };
+      } catch {
+        return { valid: false, message: 'Unable to verify email domain. Please check your email address.' };
+      }
+    }
+    
+    // Unknown DNS error - reject to be safe
+    console.error(`DNS error for ${domain}:`, error);
+    return { valid: false, message: 'Unable to verify email domain. Please check your email address.' };
   }
 }
 
