@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 // @ts-ignore
-import { validate } from 'deep-email-validator';
-// @ts-ignore
 import geoip from 'geoip-lite';
+import dns from 'dns';
+import { promisify } from 'util';
+
+const resolveMx = promisify(dns.resolveMx);
 
 // Dummy credentials - User to replace these
 const EMAIL_USER = process.env.EMAIL_USER || 'dummy_user@gmail.com';
@@ -19,6 +21,93 @@ const transporter = nodemailer.createTransport({
     pass: EMAIL_PASS
   }
 });
+
+/**
+ * Robust email validation that accepts all legitimate emails
+ * including company domains, while filtering out obviously invalid ones
+ */
+async function validateEmailRobust(email: string): Promise<{ valid: boolean; message?: string }> {
+  // Basic format validation using a comprehensive regex
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  
+  if (!email || typeof email !== 'string') {
+    return { valid: false, message: 'Email is required' };
+  }
+
+  const trimmedEmail = email.trim().toLowerCase();
+
+  // Check basic format
+  if (!emailRegex.test(trimmedEmail)) {
+    return { valid: false, message: 'Invalid email format' };
+  }
+
+  // Extract domain
+  const domain = trimmedEmail.split('@')[1];
+  
+  if (!domain) {
+    return { valid: false, message: 'Invalid email format' };
+  }
+
+  // Check for common typos in popular domains
+  const commonDomainTypos: { [key: string]: string } = {
+    'gmial.com': 'gmail.com',
+    'gmai.com': 'gmail.com',
+    'gmil.com': 'gmail.com',
+    'yahooo.com': 'yahoo.com',
+    'yaho.com': 'yahoo.com',
+    'hotmial.com': 'hotmail.com',
+    'outlok.com': 'outlook.com',
+  };
+
+  if (commonDomainTypos[domain]) {
+    return { 
+      valid: false, 
+      message: `Did you mean ${trimmedEmail.replace(domain, commonDomainTypos[domain])}?` 
+    };
+  }
+
+  // List of known disposable/temporary email providers (keep this minimal)
+  const disposableDomains = [
+    '10minutemail.com',
+    'guerrillamail.com',
+    'mailinator.com',
+    'tempmail.com',
+    'throwaway.email',
+    'trashmail.com',
+    'temp-mail.org',
+    'fakemailgenerator.com',
+    'maildrop.cc'
+  ];
+
+  // Only reject if it's a known disposable domain
+  if (disposableDomains.includes(domain)) {
+    return { valid: false, message: 'Disposable email addresses are not allowed' };
+  }
+
+  // MX record validation (to verify domain can receive emails)
+  // This is the most important check - if domain has MX records, it's likely valid
+  try {
+    const mxRecords = await resolveMx(domain);
+    
+    if (!mxRecords || mxRecords.length === 0) {
+      return { valid: false, message: 'This email domain cannot receive emails' };
+    }
+    
+    // Domain has MX records - it's valid!
+    return { valid: true };
+    
+  } catch (error: any) {
+    // DNS lookup failed
+    if (error.code === 'ENOTFOUND' || error.code === 'ENODATA') {
+      return { valid: false, message: 'This email domain does not exist' };
+    }
+    
+    // For other DNS errors (timeout, etc.), be lenient and accept the email
+    // Better to accept a potentially invalid email than reject a valid one
+    console.warn(`DNS lookup warning for ${domain}:`, error.message);
+    return { valid: true };
+  }
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -39,24 +128,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Email Verification
   if (data?.email) {
-    const { valid, reason, validators } = await validate({
-      email: data.email,
-      sender: data.email,
-      validateRegex: true,
-      validateMx: true,
-      validateTypo: true,
-      validateDisposable: true,
-      validateSMTP: false // Too slow/unreliable for this use case often
-    });
-
-    if (!valid) {
-      let errorMessage = 'Invalid email address.';
-      if (reason === 'typo') errorMessage = `Did you mean ${validators[reason]?.reason}?`;
-      else if (reason === 'disposable') errorMessage = 'Disposable email addresses are not allowed.';
-      else if (reason === 'mx') errorMessage = 'This email domain does not exist.';
-      else if (reason === 'regex') errorMessage = 'Invalid email format.';
-
-      return res.status(400).json({ message: errorMessage });
+    const validation = await validateEmailRobust(data.email);
+    
+    if (!validation.valid) {
+      return res.status(400).json({ message: validation.message || 'Invalid email address' });
     }
   }
 
