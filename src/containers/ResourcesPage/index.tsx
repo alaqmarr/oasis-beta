@@ -43,7 +43,7 @@ export default function ResourcesPage() {
                 <meta name="description" content="View Oasis Group's certifications and resources including ISO and UDYAM registration details." />
             </Head>
 
-            <Section>
+            <Section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
                 <Container>
                     <PageTitle>Resources & Certificates</PageTitle>
 

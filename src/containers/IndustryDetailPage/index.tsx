@@ -273,7 +273,7 @@ function IndustryDetailPage() {
         </Container>
       </HeroSection>
 
-      <Section>
+      <Section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
         <Container>
           {/* Products Section */}
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -307,7 +307,7 @@ function IndustryDetailPage() {
         </Container>
       </Section>
 
-      <Section bgColor={colors.primary} textColor="#FFFFFF">
+      <Section bgColor={colors.primary} textColor="#FFFFFF" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
         <Container>
           <div style={{ textAlign: 'center' }}>
             <CTATitle>Need a Custom Solution for {industry.title}?</CTATitle>
