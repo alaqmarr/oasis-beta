@@ -2,44 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, GlassCard } from '../../components/ui';
-
-const HeroSection = styled.section`
-  width: 100%;
-  padding: 8rem 0 4rem;
-  background-color: ${colors.primary};
-  background-image: linear-gradient(rgba(220, 38, 38, 0.9), rgba(220, 38, 38, 0.8)), url('/images/about/office-front.jpg');
-  background-size: cover;
-  background-position: center;
-  color: #FFFFFF;
-
-  @media (min-width: 768px) {
-    padding: 12rem 0 6rem;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  line-height: 1.1;
-
-  @media (min-width: 768px) {
-    font-size: 4rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.125rem;
-  color: #FECACA;
-  font-weight: 300;
-  max-width: 48rem;
-  line-height: 1.6;
-
-  @media (min-width: 768px) {
-    font-size: 1.5rem;
-  }
-`;
+import PageHeader from '../../components/PageHeader';
 
 const TimelineItem = styled.div`
   position: relative;
@@ -122,14 +85,11 @@ const SectionTitle = styled.h2`
 function AboutPage() {
   return (
     <main>
-      <HeroSection>
-        <Container>
-          <Title>About Oasis Group</Title>
-          <Subtitle>
-            A family-owned enterprise driven by innovation and a commitment to excellence, serving the industry since 1974.
-          </Subtitle>
-        </Container>
-      </HeroSection>
+      <PageHeader
+        title="About Oasis Group"
+        subtitle="A family-owned enterprise driven by innovation and a commitment to excellence, serving the industry since 1974."
+        bgImage="/images/about/office-front.jpg"
+      />
 
       <Section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
         <Container>

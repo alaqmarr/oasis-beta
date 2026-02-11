@@ -8,38 +8,12 @@ import { Container, Section, Button } from '../../components/ui';
 import { INDUSTRIES } from '../../data/industries';
 import { getProductsForIndustry, Product } from '../../data/products';
 import ProductEnquiryModal from '../../components/ProductEnquiryModal';
-
-const HeroSection = styled.section`
-  width: 100%;
-  padding: 8rem 0 4rem;
-  color: #FFFFFF;
-  position: relative;
-  overflow: hidden;
-
-  @media (min-width: 768px) {
-    padding: 10rem 0 5rem;
-  }
-`;
-
-const HeroImage = styled.div<{ $bgImage?: string }>`
-  position: absolute;
-  inset: 0;
-  background-image: ${props => props.$bgImage ? `url(${props.$bgImage})` : 'none'};
-  background-size: cover;
-  background-position: center;
-  background-color: ${colors.primary};
-`;
-
-const HeroOverlay = styled.div`
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(153, 27, 27, 0.9) 0%, rgba(220, 38, 38, 0.85) 100%);
-`;
+import PageHeader from '../../components/PageHeader';
 
 const Breadcrumb = styled.div`
   font-size: 0.75rem;
   color: #FECACA;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   position: relative;
@@ -56,97 +30,76 @@ const Breadcrumb = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  position: relative;
-  z-index: 10;
-
-  @media (min-width: 768px) {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-  }
-`;
-
-const Description = styled.p`
-  font-size: 1rem;
-  color: #FECACA;
-  font-weight: 300;
-  max-width: 48rem;
-  line-height: 1.6;
-  position: relative;
-  z-index: 10;
-
-  @media (min-width: 768px) {
-    font-size: 1.25rem;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  color: ${colors.primary};
-
-  @media (min-width: 768px) {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-`;
-
 const ProductsContainer = styled.div`
   position: relative;
   width: 100%;
-  min-height: 350px;
+  height: 600px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   margin-top: 2rem;
-  
-  @media (min-width: 768px) {
-    min-height: 400px;
-  }
 `;
 
 const ProductsCircle = styled.div<{ $count: number }>`
   position: relative;
-  width: 280px;
-  height: 280px;
-  
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 2px dashed ${colors.primary}40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: spin 60s linear infinite;
+
   @media (min-width: 768px) {
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
+  }
+
+  &::before {
+    content: 'Oasis Products';
+    position: absolute;
+    font-weight: 700;
+    color: ${colors.primary};
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 `;
 
 const ProductPill = styled.button<{ $angle: number; $radius: number }>`
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: ${props => {
     const angleRad = (props.$angle * Math.PI) / 180;
     const x = Math.cos(angleRad) * props.$radius;
     const y = Math.sin(angleRad) * props.$radius;
     return `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
   }};
-  background: #FFFFFF;
-  border: 2px solid ${colors.primary};
-  border-radius: 50%;
-  width: 90px;
-  height: 90px;
-  padding: 0.5rem;
-  font-size: 0.75rem;
+  background: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid ${colors.border || '#e5e7eb'};
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   font-weight: 600;
-  color: ${colors.primary};
+  color: ${colors.text};
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.3s ease;
+  z-index: 5;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  line-height: 1.2;
+  font-size: 0.75rem;
   
   @media (min-width: 768px) {
     width: 110px;
@@ -166,17 +119,7 @@ const ProductPill = styled.button<{ $angle: number; $radius: number }>`
     box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
     z-index: 10;
   }
-
-  &:active {
-    transform: ${props => {
-    const angleRad = (props.$angle * Math.PI) / 180;
-    const x = Math.cos(angleRad) * props.$radius;
-    const y = Math.sin(angleRad) * props.$radius;
-    return `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`;
-  }};
-  }
 `;
-
 
 const ContentCard = styled.div`
   background-color: #FFFFFF;
@@ -189,13 +132,15 @@ const ContentCard = styled.div`
   }
 `;
 
-const OverviewText = styled.p`
-  font-size: 1rem;
-  line-height: 1.8;
-  color: ${colors.text};
+const SectionTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: ${colors.primary};
 
   @media (min-width: 768px) {
-    font-size: 1.125rem;
+    font-size: 2rem;
+    margin-bottom: 2rem;
   }
 `;
 
@@ -215,6 +160,9 @@ function IndustryDetailPage() {
   const { slug } = router.query;
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // All keywords for SEO (same on every page)
+  const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
 
   const industry = INDUSTRIES.find(i => i.id === slug);
 
@@ -244,9 +192,6 @@ function IndustryDetailPage() {
     setSelectedProduct(null);
   };
 
-  // All keywords for SEO (same on every page)
-  const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
-
   return (
     <main>
       <Head>
@@ -257,21 +202,20 @@ function IndustryDetailPage() {
         <meta property="og:title" content={`${industry.title} Solutions | Oasis Group`} />
         <meta property="og:description" content={industry.description} />
       </Head>
-      <HeroSection>
-        <HeroImage $bgImage={industry.image || `https://placehold.co/1920x800/e2e8f0/1e293b?text=${industry.title.replace(/\s+/g, '+')}`} />
-        <HeroOverlay />
-        <Container>
-          <Breadcrumb>
-            <Link href="/" passHref legacyBehavior><a>Home</a></Link>
-            <span>/</span>
-            <Link href="/industries" passHref legacyBehavior><a>Industries</a></Link>
-            <span>/</span>
-            {industry.title}
-          </Breadcrumb>
-          <Title>{industry.title}</Title>
-          <Description>{industry.description}</Description>
-        </Container>
-      </HeroSection>
+
+      <PageHeader
+        title={industry.title}
+        subtitle={industry.description}
+        bgImage={industry.image || `https://placehold.co/1920x800/dc2626/ffffff?text=${industry.title.replace(/\s+/g, '+')}`}
+      >
+        <Breadcrumb>
+          <Link href="/" passHref legacyBehavior><a>Home</a></Link>
+          <span>/</span>
+          <Link href="/industries" passHref legacyBehavior><a>Industries</a></Link>
+          <span>/</span>
+          {industry.title}
+        </Breadcrumb>
+      </PageHeader>
 
       <Section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
         <Container>

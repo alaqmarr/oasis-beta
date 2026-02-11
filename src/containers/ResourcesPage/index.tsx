@@ -3,14 +3,7 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import { colors } from '../../themes/colors';
 import { Container, Section } from '../../components/ui';
-
-const PageTitle = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: ${colors.primary};
-  margin-bottom: 2rem;
-  text-align: center;
-`;
+import PageHeader from '../../components/PageHeader';
 
 const PDFContainer = styled.div`
   width: 100%;
@@ -43,9 +36,14 @@ export default function ResourcesPage() {
                 <meta name="description" content="View Oasis Group's certifications and resources including ISO and UDYAM registration details." />
             </Head>
 
+            <PageHeader
+                title="Resources & Certificates"
+                subtitle="Download our certifications and view company registration details."
+                bgImage="/images/about/instruments-lab.jpg"
+            />
+
             <Section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
                 <Container>
-                    <PageTitle>Resources & Certificates</PageTitle>
 
                     <CertificateInfo>
                         <InfoText>UDYAM Registration Certificate No.: UDYAM-TS-20-0004940</InfoText>

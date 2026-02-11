@@ -2,41 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, Button } from '../../components/ui';
-
-const HeroSection = styled.section`
-  width: 100%;
-  padding: 8rem 0 4rem;
-  background-color: ${colors.primary};
-  color: #FFFFFF;
-
-  @media (min-width: 768px) {
-    padding: 12rem 0 6rem;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  line-height: 1.1;
-
-  @media (min-width: 768px) {
-    font-size: 4rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.125rem;
-  color: #FECACA;
-  font-weight: 300;
-  max-width: 48rem;
-  line-height: 1.6;
-
-  @media (min-width: 768px) {
-    font-size: 1.5rem;
-  }
-`;
+import PageHeader from '../../components/PageHeader';
 
 const ContactForm = styled.form`
   background-color: #FFFFFF;
@@ -124,6 +90,7 @@ function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    setErrorMessage('');
 
     try {
       const response = await fetch('/api/send-email', {
@@ -148,27 +115,25 @@ function ContactPage() {
         setFormData({ name: '', email: '', subject: '', message: '' });
         setErrorMessage('');
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to send message.');
+        const data = await response.json();
+        setErrorMessage(data.message || 'Something went wrong.');
         setStatus('error');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      setErrorMessage('Failed to send message.');
       setStatus('error');
     }
   };
+
   return (
     <main>
-      <HeroSection>
-        <Container>
-          <Title>Contact Us</Title>
-          <Subtitle>
-            Get in touch with our engineering team for inquiries, quotes, or technical support.
-          </Subtitle>
-        </Container>
-      </HeroSection>
+      <PageHeader
+        title="Contact Us"
+        subtitle="Get in touch with our engineering team for inquiries, quotes, or technical support."
+        bgImage="/images/about/office-front.jpg"
+      />
 
-      <Section>
+      <Section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
         <Container>
           <Grid lgCols={2} gap="6rem">
             <div>

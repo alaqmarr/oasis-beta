@@ -4,50 +4,13 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { colors } from '../../themes/colors';
 import { Container, Section, Grid, GlassCard } from '../../components/ui';
+import PageHeader from '../../components/PageHeader';
 import { INDUSTRIES } from '../../data/industries';
 import { CATEGORIES, Category } from '../../data/categories';
 import { getProductsForIndustry, Product } from '../../data/products';
 import { Industry } from '../../types';
 import IndustryProductsModal from '../../components/IndustryProductsModal';
 import ProductEnquiryModal from '../../components/ProductEnquiryModal';
-
-// All keywords for SEO (same on every page)
-const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
-
-const HeroSection = styled.section`
-  width: 100%;
-  height: 60vh;
-  position: relative;
-  background-color: ${colors.primary};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url('/images/about/factory-side.jpg');
-  background-size: cover;
-  background-position: center;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
-  }
-`;
-
-const HeroTitle = styled.h1`
-  position: relative;
-  z-index: 10;
-  font-size: 2rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.025em;
-  text-align: center;
-  text-shadow: 0 4px 6px rgba(0,0,0,0.3);
-
-  @media (min-width: 768px) {
-    font-size: 5rem;
-  }
-`;
 
 const CategoryContainer = styled.div`
   display: flex;
@@ -116,6 +79,84 @@ const SubIndustryCard = styled.div`
   text-decoration: none;
 `;
 
+const IndustryGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  background-color: #fafafa;
+`;
+
+const IndustryCard = styled.div`
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-color: ${colors.primaryLight};
+  }
+`;
+
+const IndustryIcon = styled.div`
+  margin-bottom: 1rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: ${colors.primaryLight};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${colors.primary};
+  font-size: 1.5rem;
+`;
+
+const IndustryName = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: ${colors.text};
+  margin-bottom: 0.5rem;
+`;
+
+const ProductCount = styled.span`
+  font-size: 0.875rem;
+  color: ${colors.textLight};
+`;
+
+const IconWrapper = styled.div`
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 100px;
+    height: 100px;
+  }
+
+  img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+  }
+`;
+
+// All keywords for SEO (same on every page)
+const allKeywords = 'speed sensors, vibration sensors, temperature sensors, temperature transmitters, pressure sensors, pressure transmitters, flow meters, level transmitters, limit switches, vacuum contactors, remote monitoring system, condition monitoring, predictive maintenance, automotive sensors, railway instrumentation, oil and gas instrumentation, thermal power sensors, nuclear power instrumentation, hydel power sensors, wind energy sensors, defence sensors, mining instrumentation, steel plant sensors, energy storage monitoring, water treatment sensors, industrial instrumentation, automation solutions, industrial sensors India, precision engineering, process control, safety systems, Oasis Group';
+
+// Hero components removed
+
 function IndustriesPage() {
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(null);
     const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
@@ -151,9 +192,11 @@ function IndustriesPage() {
                 <meta property="og:title" content="Industries We Serve | Oasis Group" />
                 <meta property="og:description" content="Industrial instrumentation solutions for automotive, railway, power generation, oil & gas, and manufacturing industries." />
             </Head>
-            <HeroSection>
-                <HeroTitle>Our Presence</HeroTitle>
-            </HeroSection>
+            <PageHeader
+                title="Industries We Serve"
+                subtitle="We operate across diverse critical sectors, delivering specialized instrumentation and automation solutions."
+                bgImage="/images/about/factory-side.jpg"
+            />
 
             <Section>
                 <Container>
