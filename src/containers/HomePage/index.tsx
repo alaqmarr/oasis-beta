@@ -104,11 +104,11 @@ function HomePage() {
 
             {/* <ProductShowcase /> */}
 
-            <Section bgColor={colors.primary} textColor="#FFFFFF">
+            <Section bgColor={colors.primary} textColor="#FFFFFF" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
                 <Container>
                     <div style={{ textAlign: 'center' }}>
-                        <h2 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '2rem' }}>Ready to Optimize Your Operations?</h2>
-                        <p style={{ fontSize: '1.25rem', marginBottom: '4rem', color: '#FECACA' }}>
+                        <h2 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem' }}>Ready to Optimize Your Operations?</h2>
+                        <p style={{ fontSize: '1.25rem', marginBottom: '2rem', color: '#FECACA' }}>
                             Contact our engineering team today for a consultation tailored to your specific needs.
                         </p>
                         <Link href="/contact" passHref legacyBehavior>

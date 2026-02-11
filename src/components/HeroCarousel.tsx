@@ -64,7 +64,8 @@ const Title = styled.h1`
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.1;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 
   @media (min-width: 768px) {
     font-size: 4.5rem;
@@ -76,8 +77,8 @@ const Subtitle = styled.p`
   margin-bottom: 2rem;
   line-height: 1.6;
   max-width: 600px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-  color: #E5E7EB;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  color: #FFFFFF;
 
   @media (min-width: 768px) {
     font-size: 1.25rem;
@@ -164,7 +165,7 @@ export default function HeroCarousel() {
                 <Button>Explore Industries</Button>
               </Link>
               <Link href="/contact" passHref legacyBehavior>
-                <Button variant="outline">Contact Us</Button>
+                <Button variant="outline" style={{ borderColor: '#FFFFFF' }}>Contact Us</Button>
               </Link>
             </ButtonGroup>
           </Content>
