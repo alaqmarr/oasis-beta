@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Configuration
-const AUTH_API_URL = 'https://services.api.alaqmar.dev/api/authorize';
-const CLIENT_ID = 'cmlj2mucy000004i9wvzjsv11';
-const API_KEY = 'cmlj2mucy000104i9pbvkixis';
+const AUTH_API_URL = process.env.AUTHORISATION_URL;
+const CLIENT_ID = process.env.AUTHORISATION_ID;
+const API_KEY = process.env.AUTHORISATION_KEY;
 
 // Paths that are always accessible (static assets, api routes, maintenance page)
 const PUBLIC_PATHS = [
@@ -17,6 +17,10 @@ const PUBLIC_PATHS = [
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (!AUTH_API_URL || !CLIENT_ID || !API_KEY) {
+    return NextResponse.redirect(new URL('/service-unavailable', request.url));
+  }
 
   // 1. Bypass check for public paths and static assets
   if (
